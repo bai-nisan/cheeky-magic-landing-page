@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import { workflows, getWorkflowContent } from "@/types/workflow";
-import { ConversationHistory } from "@/components/conversation-history";
 import { ChatInterface } from "@/components/chat-interface";
 import { DataAnalysisPanel } from "@/components/data-analysis-panel";
 import { DashboardHeader } from "@/components/dashboard-header";
@@ -12,12 +11,7 @@ import {
   SidebarContent,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import {
-  MessageSquare,
-  BarChart3,
-  PanelLeftClose,
-  PanelRightClose,
-} from "lucide-react";
+import { BarChart3, PanelRightClose } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function ChatDemo() {
@@ -123,7 +117,7 @@ export function ChatDemo() {
           onRestartDemo={restartDemo}
         />
 
-        {/* Dashboard Content - Sidebar Layout */}
+        {/* Dashboard Content - Two Panel Layout */}
         <main
           id="main-content"
           role="main"
@@ -133,41 +127,13 @@ export function ChatDemo() {
             "animate-fade-up opacity-0 [--animation-delay:600ms]"
           )}
         >
-          {/* Left Sidebar - Conversation History */}
-          <Sidebar
-            side="left"
-            width="320px"
-            collapsible={true}
-            className={cn(
-              "hidden md:flex",
-              "border-r border-white/20 dark:border-gray-700/40",
-              "bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm",
-              "translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1000ms]"
-            )}
-          >
-            <SidebarHeader className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
-              <div className="flex items-center gap-2 flex-1">
-                <MessageSquare className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                <span className="font-semibold text-gray-900 dark:text-gray-100">
-                  Conversations
-                </span>
-              </div>
-              <SidebarTrigger>
-                <PanelLeftClose className="h-4 w-4" />
-              </SidebarTrigger>
-            </SidebarHeader>
-            <SidebarContent className="p-0">
-              <ConversationHistory currentStep={currentStep} />
-            </SidebarContent>
-          </Sidebar>
-
           {/* Center Panel - Chat Interface */}
           <section
             role="region"
             aria-label="Chat interface"
             className={cn(
               "flex-1 min-w-0 flex flex-col",
-              "translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1100ms]"
+              "translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1000ms]"
             )}
           >
             <ChatInterface
@@ -192,7 +158,7 @@ export function ChatDemo() {
               "hidden lg:flex",
               "border-l border-white/20 dark:border-gray-700/40",
               "bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm",
-              "translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1200ms]"
+              "translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1100ms]"
             )}
           >
             <SidebarHeader className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
