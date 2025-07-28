@@ -79,7 +79,7 @@ export function ChatDemo() {
 
   return (
     <div
-      className="w-full h-[1200px]"
+      className="w-full h-[900px]"
       role="application"
       aria-label="FashionCo Marketing Dashboard Demo"
     >
