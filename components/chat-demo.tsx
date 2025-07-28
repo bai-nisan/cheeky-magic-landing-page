@@ -161,7 +161,7 @@ export function ChatDemo() {
               "translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1100ms]"
             )}
           >
-            <SidebarHeader className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+            <SidebarHeader className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm mt-4">
               <SidebarTrigger>
                 <PanelRightClose className="h-4 w-4" />
               </SidebarTrigger>
