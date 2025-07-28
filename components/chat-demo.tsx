@@ -10,9 +10,31 @@ import {
   SidebarHeader,
   SidebarContent,
   SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { BarChart3, PanelRightClose } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+// Custom header component that handles collapsed state
+function AnalyticsSidebarHeader() {
+  const { isCollapsed } = useSidebar();
+  
+  return (
+    <SidebarHeader className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm mt-4">
+      <SidebarTrigger>
+        <PanelRightClose className="h-4 w-4" />
+      </SidebarTrigger>
+      {!isCollapsed && (
+        <div className="flex items-center gap-2 flex-1 justify-end">
+          <span className="font-semibold text-gray-900 dark:text-gray-100">
+            Analytics
+          </span>
+          <BarChart3 className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+        </div>
+      )}
+    </SidebarHeader>
+  );
+}
 
 export function ChatDemo() {
   // Use the budget optimization workflow (first one) as the fixed workflow
@@ -161,17 +183,7 @@ export function ChatDemo() {
               "translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1100ms]"
             )}
           >
-            <SidebarHeader className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm mt-4">
-              <SidebarTrigger>
-                <PanelRightClose className="h-4 w-4" />
-              </SidebarTrigger>
-              <div className="flex items-center gap-2 flex-1 justify-end">
-                <span className="font-semibold text-gray-900 dark:text-gray-100">
-                  Analytics
-                </span>
-                <BarChart3 className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-              </div>
-            </SidebarHeader>
+            <AnalyticsSidebarHeader />
             <SidebarContent className="p-0">
               <DataAnalysisPanel
                 selectedWorkflow={selectedWorkflow}

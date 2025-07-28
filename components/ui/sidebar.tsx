@@ -104,10 +104,16 @@ const SidebarContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
+  const { isCollapsed } = useSidebar();
+
   return (
     <div
       ref={ref}
-      className={cn("flex-1 overflow-y-auto", className)}
+      className={cn(
+        "flex-1 overflow-y-auto",
+        isCollapsed && "hidden",
+        className
+      )}
       {...props}
     />
   );
