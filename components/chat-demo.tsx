@@ -1,11 +1,15 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { Workflow, workflows, getWorkflowContent } from "@/types/workflow";
-import { WorkflowSidebar } from "@/components/WorkflowSidebar";
-import { ChatInterface } from "@/components/ChatInterface";
-import { DataAnalysisPanel } from "@/components/DataAnalysisPanel";
+import { WorkflowSidebar } from "@/components/workflow-sidebar";
+import { ChatInterface } from "@/components/chat-interface";
+import { DataAnalysisPanel } from "@/components/data-analysis-panel";
 
-export function ChatDemo() {
+interface ChatDemoProps {
+  contained?: boolean;
+}
+
+export function ChatDemo({ contained = false }: ChatDemoProps) {
   const [selectedWorkflow, setSelectedWorkflow] = useState(workflows[0]);
   const [showDataPanel, setShowDataPanel] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
@@ -76,11 +80,21 @@ export function ChatDemo() {
   const workflowContent = getWorkflowContent(selectedWorkflow);
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4">
+    <div
+      className={contained ? "w-full h-full" : "w-full max-w-6xl mx-auto px-4"}
+    >
       {/* Dashboard Interface - Updated with glass morphism styling */}
-      <div className="h-[700px] w-full bg-white/85 dark:bg-gray-900/85 backdrop-blur-sm rounded-2xl shadow-xl border border-white/30 dark:border-gray-700/40 flex flex-col overflow-hidden relative">
+      <div
+        className={`w-full bg-white/85 dark:bg-gray-900/85 backdrop-blur-sm shadow-xl border border-white/30 dark:border-gray-700/40 flex flex-col overflow-hidden relative ${
+          contained ? "h-full rounded-[inherit]" : "h-[700px] rounded-2xl"
+        }`}
+      >
         {/* Subtle gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-50/30 via-transparent to-blue-50/30 dark:from-purple-900/10 dark:via-transparent dark:to-blue-900/10 pointer-events-none rounded-2xl" />
+        <div
+          className={`absolute inset-0 bg-gradient-to-br from-purple-50/30 via-transparent to-blue-50/30 dark:from-purple-900/10 dark:via-transparent dark:to-blue-900/10 pointer-events-none ${
+            contained ? "rounded-[inherit]" : "rounded-2xl"
+          }`}
+        />
 
         {/* Dashboard Header - Updated with modern styling */}
         <div className="relative flex-shrink-0 bg-gradient-to-r from-gray-50/80 to-gray-100/80 dark:from-gray-800/80 dark:to-gray-700/80 backdrop-blur-sm border-b border-gray-200/60 dark:border-gray-700/60 px-4 sm:px-6 py-4">

@@ -3,9 +3,9 @@
 import React from "react";
 import { Workflow, WorkflowContent } from "@/types/workflow";
 import { PlaceholdersAndVanishInput } from "@/components/ui/placeholders-and-vanish-input";
-import { ChatMessage } from "@/components/ui/ChatMessage";
-import { DataGatheringSteps } from "@/components/ui/DataGatheringSteps";
-import { useDemoFlow } from "@/hooks/useDemoFlow";
+import { ChatMessage } from "@/components/ui/chat-message";
+import { DataGatheringSteps } from "@/components/ui/data-gathering-steps";
+import { useDemoFlow } from "@/hooks/use-demo-flow";
 
 interface ChatInterfaceProps {
   selectedWorkflow: Workflow;

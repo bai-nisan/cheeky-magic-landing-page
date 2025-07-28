@@ -4,7 +4,7 @@
 import { BorderBeam } from "@/components/magicui/border-beam";
 import TextShimmer from "@/components/magicui/text-shimmer";
 import { Button } from "@/components/ui/button";
-import { ChatDemo } from "@/components/ChatDemo";
+import { ChatDemo } from "@/components/chat-demo";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
@@ -54,7 +54,7 @@ export default function HeroSection() {
           />
 
           <div className="relative w-full h-full rounded-[inherit] border bg-white dark:bg-gray-900 overflow-hidden">
-            <ChatDemo />
+            <ChatDemo contained />
           </div>
         </div>
       </div>
