@@ -28,7 +28,7 @@ export function DashboardHeader({
         <div className="flex items-center space-x-3">
           <div
             role="img"
-            aria-label="Cheeky AI logo"
+            aria-label="FashionCo logo"
             className={cn(
               "w-8 h-8 rounded-xl flex items-center justify-center shadow-lg",
               "bg-gradient-to-br from-purple-600 to-pink-500",
@@ -36,7 +36,7 @@ export function DashboardHeader({
             )}
           >
             <span className="text-white text-sm font-bold" aria-hidden="true">
-              C
+              F
             </span>
           </div>
           <span
@@ -45,7 +45,7 @@ export function DashboardHeader({
               "animate-fade-in opacity-0 [--animation-delay:700ms]"
             )}
           >
-            Cheeky AI
+            FashionCo
           </span>
         </div>
 

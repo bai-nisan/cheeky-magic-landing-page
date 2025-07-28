@@ -81,7 +81,7 @@ export function ChatDemo() {
     <div
       className="w-full h-full"
       role="application"
-      aria-label="Cheeky AI Marketing Dashboard Demo"
+      aria-label="FashionCo Marketing Dashboard Demo"
     >
       {/* Skip link for accessibility */}
       <a
