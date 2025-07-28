@@ -18,9 +18,9 @@ export function DataAnalysisPanel({
   showImprovedRecommendation,
 }: DataAnalysisPanelProps) {
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-full flex flex-col overflow-hidden relative">
       {/* Panel Header */}
-      <div className="p-3 border-b border-white/40 dark:border-gray-600/40">
+      <div className="p-3 border-b border-white/40 dark:border-gray-600/40 flex-shrink-0">
         <h4 className="font-medium text-gray-900 dark:text-white text-sm">
           {workflowContent.analysisTitle}
         </h4>
@@ -36,7 +36,7 @@ export function DataAnalysisPanel({
       </div>
 
       {/* Analysis Content */}
-      <div className="flex-1 p-3 space-y-4 overflow-y-auto">
+      <div className="flex-1 p-3 space-y-4 overflow-y-auto min-h-0">
         {selectedWorkflow.status === "active" ? (
           <>
             {/* Data Sources */}

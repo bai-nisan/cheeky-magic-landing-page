@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 // Custom header component that handles collapsed state
 function AnalyticsSidebarHeader() {
   const { isCollapsed } = useSidebar();
-  
+
   return (
     <SidebarHeader className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm mt-4">
       <SidebarTrigger>
@@ -145,7 +145,7 @@ export function ChatDemo() {
           role="main"
           aria-label="Dashboard main content"
           className={cn(
-            "relative flex flex-1 min-h-0",
+            "relative flex flex-1 min-h-0 overflow-hidden",
             "animate-fade-up opacity-0 [--animation-delay:600ms]"
           )}
         >
@@ -154,7 +154,7 @@ export function ChatDemo() {
             role="region"
             aria-label="Chat interface"
             className={cn(
-              "flex-1 min-w-0 flex flex-col",
+              "flex-1 min-w-0 flex flex-col overflow-hidden",
               "translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1000ms]"
             )}
           >
@@ -177,7 +177,7 @@ export function ChatDemo() {
             width="400px"
             collapsible={true}
             className={cn(
-              "hidden lg:flex",
+              "hidden lg:flex z-10",
               "border-l border-white/20 dark:border-gray-700/40",
               "bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm",
               "translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1100ms]"

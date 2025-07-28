@@ -65,7 +65,7 @@ const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
             minWidth: isCollapsed ? "60px" : width,
           }}
           className={cn(
-            "flex flex-col border-r bg-background transition-all duration-300 ease-in-out",
+            "flex flex-col border-r bg-background transition-all duration-300 ease-in-out overflow-hidden relative",
             side === "right" && "border-l border-r-0",
             isCollapsed && "items-center",
             className
@@ -109,11 +109,11 @@ const SidebarContent = React.forwardRef<
   return (
     <div
       ref={ref}
-      className={cn(
-        "flex-1 overflow-y-auto",
-        isCollapsed && "hidden",
-        className
-      )}
+      className={cn("flex-1 overflow-hidden", className)}
+      style={{
+        display: isCollapsed ? "none" : "flex",
+        flexDirection: "column",
+      }}
       {...props}
     />
   );
