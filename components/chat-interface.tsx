@@ -57,10 +57,10 @@ export function ChatInterface({
     <div
       className={`${
         showDataPanel ? "flex-1" : "flex-1"
-      } relative h-full border-r border-gray-200 dark:border-gray-700 flex flex-col overflow-hidden transition-all duration-500`}
+      } relative h-full flex flex-col overflow-hidden transition-all duration-500`}
     >
       {/* Header - Fixed at top */}
-      <div className="flex-shrink-0 p-3 border-b border-gray-100 dark:border-gray-700">
+      <div className="flex-shrink-0 px-4 sm:px-6 py-3 border-b border-gray-100 dark:border-gray-700 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm">
         <h4 className="font-medium text-gray-900 dark:text-white text-sm">
           Conversation
         </h4>

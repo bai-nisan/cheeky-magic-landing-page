@@ -90,7 +90,7 @@ const SidebarHeader = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "flex items-center border-b px-4 py-3",
+        "flex items-center border-b px-4 sm:px-6 py-3",
         isCollapsed && "justify-center px-2",
         className
       )}
