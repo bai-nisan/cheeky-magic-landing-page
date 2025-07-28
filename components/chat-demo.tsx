@@ -6,8 +6,18 @@ import { ConversationHistory } from "@/components/conversation-history";
 import { ChatInterface } from "@/components/chat-interface";
 import { DataAnalysisPanel } from "@/components/data-analysis-panel";
 import { DashboardHeader } from "@/components/dashboard-header";
-import { Sidebar, SidebarHeader, SidebarContent, SidebarTrigger } from "@/components/ui/sidebar";
-import { MessageSquare, BarChart3, PanelLeftClose, PanelRightClose } from "lucide-react";
+import {
+  Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import {
+  MessageSquare,
+  BarChart3,
+  PanelLeftClose,
+  PanelRightClose,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function ChatDemo() {
@@ -124,9 +134,9 @@ export function ChatDemo() {
           )}
         >
           {/* Left Sidebar - Conversation History */}
-          <Sidebar 
-            side="left" 
-            width="320px" 
+          <Sidebar
+            side="left"
+            width="320px"
             collapsible={true}
             className={cn(
               "hidden md:flex",
@@ -174,9 +184,9 @@ export function ChatDemo() {
           </section>
 
           {/* Right Sidebar - Analytics Panel */}
-          <Sidebar 
-            side="right" 
-            width="400px" 
+          <Sidebar
+            side="right"
+            width="400px"
             collapsible={true}
             className={cn(
               "hidden lg:flex",

@@ -16,7 +16,9 @@ interface SidebarContextType {
   side: "left" | "right";
 }
 
-const SidebarContext = React.createContext<SidebarContextType | undefined>(undefined);
+const SidebarContext = React.createContext<SidebarContextType | undefined>(
+  undefined
+);
 
 const useSidebar = () => {
   const context = React.useContext(SidebarContext);
@@ -27,26 +29,32 @@ const useSidebar = () => {
 };
 
 const Sidebar = React.forwardRef<HTMLDivElement, SidebarProps>(
-  ({ 
-    side = "left", 
-    width = "300px", 
-    collapsible = false, 
-    defaultCollapsed = false,
-    className, 
-    children, 
-    ...props 
-  }, ref) => {
+  (
+    {
+      side = "left",
+      width = "300px",
+      collapsible = false,
+      defaultCollapsed = false,
+      className,
+      children,
+      ...props
+    },
+    ref
+  ) => {
     const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed);
-    
+
     const toggleCollapsed = React.useCallback(() => {
-      setIsCollapsed(prev => !prev);
+      setIsCollapsed((prev) => !prev);
     }, []);
 
-    const contextValue = React.useMemo(() => ({
-      isCollapsed,
-      toggleCollapsed,
-      side
-    }), [isCollapsed, toggleCollapsed, side]);
+    const contextValue = React.useMemo(
+      () => ({
+        isCollapsed,
+        toggleCollapsed,
+        side,
+      }),
+      [isCollapsed, toggleCollapsed, side]
+    );
 
     return (
       <SidebarContext.Provider value={contextValue}>
@@ -77,7 +85,7 @@ const SidebarHeader = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
   const { isCollapsed } = useSidebar();
-  
+
   return (
     <div
       ref={ref}
@@ -111,15 +119,11 @@ const SidebarFooter = React.forwardRef<
   React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
   const { isCollapsed } = useSidebar();
-  
+
   return (
     <div
       ref={ref}
-      className={cn(
-        "border-t px-4 py-3",
-        isCollapsed && "px-2",
-        className
-      )}
+      className={cn("border-t px-4 py-3", isCollapsed && "px-2", className)}
       {...props}
     />
   );
@@ -131,7 +135,7 @@ const SidebarTrigger = React.forwardRef<
   React.ButtonHTMLAttributes<HTMLButtonElement>
 >(({ className, ...props }, ref) => {
   const { toggleCollapsed } = useSidebar();
-  
+
   return (
     <button
       ref={ref}
@@ -154,4 +158,4 @@ export {
   SidebarFooter,
   SidebarTrigger,
   useSidebar,
-}; 
+};
