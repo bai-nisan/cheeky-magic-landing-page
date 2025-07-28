@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 export function ChatDemo() {
   // Use the budget optimization workflow (first one) as the fixed workflow
   const selectedWorkflow = workflows[0];
-  const [showDataPanel, setShowDataPanel] = useState(false);
+  const [showDataPanel, setShowDataPanel] = useState(true); // Always show for constant size
   const [currentStep, setCurrentStep] = useState(0);
   const [showFeedbackStage, setShowFeedbackStage] = useState(false);
   const [showImprovedRecommendation, setShowImprovedRecommendation] =
@@ -41,7 +41,7 @@ export function ChatDemo() {
   };
 
   const handleDataGatheringComplete = () => {
-    setShowDataPanel(true);
+    // showDataPanel is now always true for constant size
     setCurrentStep(3); // Show recommendations
 
     // Show feedback stage after showing recommendations
@@ -65,7 +65,7 @@ export function ChatDemo() {
 
   const restartDemo = () => {
     setCurrentStep(0);
-    setShowDataPanel(false);
+    // showDataPanel stays true for constant size
     setShowFeedbackStage(false);
     setShowImprovedRecommendation(false);
     setFeedbackProcessingComplete(false);
@@ -79,7 +79,7 @@ export function ChatDemo() {
 
   return (
     <div
-      className="w-full h-full"
+      className="w-full h-[600px]"
       role="application"
       aria-label="FashionCo Marketing Dashboard Demo"
     >
