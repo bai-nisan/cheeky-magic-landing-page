@@ -1,0 +1,246 @@
+---
+alwaysApply: true
+description: Complete development guide for Magic Landing Page project
+---
+
+# Magic Landing Page Development Guide
+
+## Project Overview
+
+This is a Next.js 15.3.5 landing page template built with modern React patterns, featuring:
+- **Framework**: Next.js 15 with App Router architecture
+- **React**: Version 19.1.0 with latest features
+- **Styling**: Tailwind CSS v4 with custom animations and design system
+- **Components**: Shadcn/ui (New York style) + Magic UI animation components
+- **TypeScript**: Strict configuration with path aliases
+- **Theme**: Dark-first design with next-themes provider
+
+## Architecture & File Structure
+
+### Route Groups
+```
+app/
+├── (marketing)/          # Public marketing pages
+│   ├── page.tsx         # Landing page
+│   └── layout.tsx       # Marketing layout
+├── (auth)/              # Authentication pages
+│   ├── login/page.tsx
+│   ├── signin/page.tsx
+│   └── signup/page.tsx
+├── layout.tsx           # Root layout
+└── globals.css          # Global styles
+```
+
+### Component Organization
+```
+components/
+├── landing/             # Landing page sections
+│   ├── hero-section.tsx
+│   ├── client-section.tsx
+│   ├── pricing-section.tsx
+│   └── cta-section.tsx
+├── magicui/            # Animated UI components
+│   ├── particles.tsx
+│   ├── border-beam.tsx
+│   ├── text-shimmer.tsx
+│   └── sphere-mask.tsx
+├── ui/                 # Shadcn/ui base components
+└── site-*.tsx          # Site-wide components (header, footer, banner)
+```
+
+## Development Patterns & Best Practices
+
+### Import Conventions
+Always use path aliases with `@/` prefix:
+```tsx
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import HeroSection from "@/components/landing/hero-section";
+```
+
+### Component Patterns
+
+#### Server vs Client Components
+- **Default**: Server components (no "use client")
+- **Client components**: Add `"use client"` directive when using:
+  - React hooks (useState, useEffect, useRef)
+  - Event handlers
+  - Browser APIs
+  - Framer Motion animations
+
+#### Styling with Tailwind + cn()
+Always use the `cn()` utility for className merging:
+```tsx
+import { cn } from "@/lib/utils";
+
+className={cn(
+  "base-classes",
+  "conditional-classes",
+  props.className
+)}
+```
+
+#### Animation Patterns
+- **CSS Variables**: Use `--animation-delay` for staggered animations
+- **Framer Motion**: For complex interactions and view-based animations
+- **Magic UI**: For specialized effects (particles, beams, shimmer)
+
+```tsx
+// Staggered animation example
+className="translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:400ms]"
+```
+
+### TypeScript Configuration
+- **Strict mode**: Enabled with comprehensive type checking
+- **Path mapping**: `@/*` resolves to project root
+- **Target**: ES2017 for broad compatibility
+
+### Styling Guidelines
+
+#### Design System
+- **Base**: Tailwind CSS v4 with custom theme
+- **Colors**: CSS variable-based design tokens
+- **Typography**: Inter font with font-sans variable
+- **Dark Mode**: Default theme with class-based switching
+
+#### Custom CSS Variables
+```css
+--navigation-height: 3.5rem;
+--radius-lg: var(--radius);
+--animate-fade-in: fade-in 1000ms var(--animation-delay, 0ms) ease forwards;
+```
+
+#### Responsive Design
+Follow mobile-first approach:
+```tsx
+className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
+```
+
+### Form Handling
+Use react-hook-form + zod for validation:
+```tsx
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+```
+
+### Icons & Assets
+- **Primary**: Radix UI icons (`@radix-ui/react-icons`)
+- **Secondary**: Lucide React (`lucide-react`)
+- **Images**: Store in `/public` directory
+
+## Component Development Standards
+
+### Landing Page Sections
+Each section should:
+1. Be a default export function
+2. Use semantic HTML5 elements
+3. Include proper TypeScript types
+4. Follow responsive design patterns
+5. Use consistent spacing/layout classes
+
+### Magic UI Components
+- Import from `@/components/magicui/`
+- Configure via props (quantity, ease, size, etc.)
+- Position with absolute/relative classes
+- Use z-index appropriately (-z-10 for backgrounds)
+
+### Authentication Pages
+- Include proper metadata exports
+- Use consistent layout patterns
+- Include navigation back to home
+- Follow accessibility guidelines
+
+## Performance & Optimization
+
+### Image Optimization
+```tsx
+// Use Next.js Image component
+import Image from "next/image";
+
+// For hero images, consider:
+alt="Descriptive text"
+priority={true}  // For above-the-fold images
+```
+
+### Animation Performance
+- Use `transform` and `opacity` for animations
+- Prefer CSS animations over JavaScript
+- Use `will-change` sparingly
+- Implement proper `useInView` for scroll animations
+
+### Bundle Optimization
+- Tree-shake unused components
+- Use dynamic imports for heavy components
+- Optimize Magic UI component imports
+
+## Development Workflow
+
+### Running the Project
+```bash
+npm install --legacy-peer-deps  # Handle React 19 peer deps
+npm run dev                     # Start development server
+npm run build                   # Production build
+npm run lint                    # ESLint checking
+```
+
+### Adding New Components
+1. Create in appropriate directory (`ui/`, `landing/`, `magicui/`)
+2. Follow TypeScript strict patterns
+3. Export as default function
+4. Include proper props interface
+5. Add to main page imports
+
+### Theming
+- Default: Dark theme
+- Provider: `ThemeProvider` in root layout
+- Toggle: Use `next-themes` hook
+- CSS: Design tokens via CSS variables
+
+### State Management
+- **Forms**: react-hook-form
+- **Theme**: next-themes context
+- **Local state**: React hooks
+- **Server state**: Next.js built-in patterns
+
+## Testing & Quality
+
+### Code Quality
+- ESLint configuration included
+- TypeScript strict mode enabled
+- Import organization standards
+- Consistent naming conventions
+
+### Browser Support
+- Modern browsers (ES2017+)
+- Mobile-responsive design
+- Touch interaction support
+- Accessibility considerations
+
+## Deployment Considerations
+
+### Environment
+- Node.js compatible with Next.js 15
+- Static asset optimization
+- Environment variable patterns
+- Build output optimization
+
+### Performance
+- Image optimization enabled
+- CSS optimization via Tailwind
+- Bundle splitting configured
+- Server-side rendering optimized
+
+## Key Files Reference
+
+- **Main Layout**: [app/layout.tsx](mdc:app/layout.tsx)
+- **Landing Page**: [app/(marketing)/page.tsx](mdc:app/(marketing)/page.tsx)
+- **Utils**: [lib/utils.ts](mdc:lib/utils.ts)
+- **Components Config**: [components.json](mdc:components.json)
+- **TypeScript Config**: [tsconfig.json](mdc:tsconfig.json)
+- **Package Config**: [package.json](mdc:package.json)
+- **Global Styles**: [app/globals.css](mdc:app/globals.css)
+
+---
+
+This guide ensures consistent development patterns and optimal performance for the Magic Landing Page project. Follow these conventions for maintainable, scalable code.
