@@ -6,6 +6,8 @@ import { ConversationHistory } from "@/components/conversation-history";
 import { ChatInterface } from "@/components/chat-interface";
 import { DataAnalysisPanel } from "@/components/data-analysis-panel";
 import { DashboardHeader } from "@/components/dashboard-header";
+import { Sidebar, SidebarHeader, SidebarContent, SidebarTrigger } from "@/components/ui/sidebar";
+import { MessageSquare, BarChart3, PanelLeftClose, PanelRightClose } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function ChatDemo() {
@@ -111,7 +113,7 @@ export function ChatDemo() {
           onRestartDemo={restartDemo}
         />
 
-        {/* Dashboard Content - Three Panel Layout */}
+        {/* Dashboard Content - Sidebar Layout */}
         <main
           id="main-content"
           role="main"
@@ -121,24 +123,40 @@ export function ChatDemo() {
             "animate-fade-up opacity-0 [--animation-delay:600ms]"
           )}
         >
-          {/* Left Panel - Conversation History */}
-          <aside
-            role="navigation"
-            aria-label="Conversation history"
+          {/* Left Sidebar - Conversation History */}
+          <Sidebar 
+            side="left" 
+            width="320px" 
+            collapsible={true}
             className={cn(
-              "hidden md:block",
+              "hidden md:flex",
+              "border-r border-white/20 dark:border-gray-700/40",
+              "bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm",
               "translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1000ms]"
             )}
           >
-            <ConversationHistory currentStep={currentStep} />
-          </aside>
+            <SidebarHeader className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+              <div className="flex items-center gap-2 flex-1">
+                <MessageSquare className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                <span className="font-semibold text-gray-900 dark:text-gray-100">
+                  Conversations
+                </span>
+              </div>
+              <SidebarTrigger>
+                <PanelLeftClose className="h-4 w-4" />
+              </SidebarTrigger>
+            </SidebarHeader>
+            <SidebarContent className="p-0">
+              <ConversationHistory currentStep={currentStep} />
+            </SidebarContent>
+          </Sidebar>
 
-          {/* Middle Panel - Chat Interface */}
+          {/* Center Panel - Chat Interface */}
           <section
             role="region"
             aria-label="Chat interface"
             className={cn(
-              "flex-1 min-w-0",
+              "flex-1 min-w-0 flex flex-col",
               "translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1100ms]"
             )}
           >
@@ -155,23 +173,39 @@ export function ChatDemo() {
             />
           </section>
 
-          {/* Right Panel - Data Analysis Panel */}
-          <aside
-            role="complementary"
-            aria-label="Data analysis panel"
+          {/* Right Sidebar - Analytics Panel */}
+          <Sidebar 
+            side="right" 
+            width="400px" 
+            collapsible={true}
             className={cn(
-              "hidden lg:block",
+              "hidden lg:flex",
+              "border-l border-white/20 dark:border-gray-700/40",
+              "bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm",
               "translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1200ms]"
             )}
           >
-            <DataAnalysisPanel
-              selectedWorkflow={selectedWorkflow}
-              workflowContent={workflowContent}
-              showDataPanel={showDataPanel}
-              currentStep={currentStep}
-              showImprovedRecommendation={feedbackProcessingComplete}
-            />
-          </aside>
+            <SidebarHeader className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+              <SidebarTrigger>
+                <PanelRightClose className="h-4 w-4" />
+              </SidebarTrigger>
+              <div className="flex items-center gap-2 flex-1 justify-end">
+                <span className="font-semibold text-gray-900 dark:text-gray-100">
+                  Analytics
+                </span>
+                <BarChart3 className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+              </div>
+            </SidebarHeader>
+            <SidebarContent className="p-0">
+              <DataAnalysisPanel
+                selectedWorkflow={selectedWorkflow}
+                workflowContent={workflowContent}
+                showDataPanel={showDataPanel}
+                currentStep={currentStep}
+                showImprovedRecommendation={feedbackProcessingComplete}
+              />
+            </SidebarContent>
+          </Sidebar>
         </main>
       </div>
     </div>
