@@ -12,23 +12,43 @@ interface MessageListProps {
 
 export function MessageList({ messages, isTyping }: MessageListProps) {
   const messagesEndRef = React.useRef<HTMLDivElement>(null)
+  const containerRef = React.useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    // Use scrollTop instead of scrollIntoView to prevent affecting page scroll
+    if (containerRef.current) {
+      containerRef.current.scrollTop = containerRef.current.scrollHeight
+    }
   }
 
   React.useEffect(() => {
-    scrollToBottom()
-  }, [messages, isTyping])
+    // Add a small delay to prevent jumping during rapid state changes
+    const timer = setTimeout(() => {
+      scrollToBottom()
+    }, 100)
+
+    return () => clearTimeout(timer)
+  }, [messages])
+
+  // Only scroll on typing changes if there are already messages
+  React.useEffect(() => {
+    if (messages.length > 0) {
+      const timer = setTimeout(() => {
+        scrollToBottom()
+      }, 50)
+
+      return () => clearTimeout(timer)
+    }
+  }, [isTyping, messages.length])
 
   return (
-    <>
+    <div ref={containerRef} className="flex-1 overflow-y-auto p-3 space-y-3 min-h-0">
       {messages.map((message) => (
         <ChatMessageItem key={message.id} message={message} />
       ))}
       {isTyping && <TypingIndicator />}
       <div ref={messagesEndRef} />
-    </>
+    </div>
   )
 }
 

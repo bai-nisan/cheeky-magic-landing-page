@@ -84,7 +84,7 @@ export function ChatContainer({
 
 export function ChatMessages({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex-1 overflow-y-auto p-3 space-y-3 min-h-0">
+    <div className="flex-1 min-h-0">
       {children}
     </div>
   );
