@@ -1,16 +1,16 @@
 "use client";
+
 import React, { useState, useEffect } from "react";
-import { Workflow, workflows, getWorkflowContent } from "@/types/workflow";
-import { WorkflowSidebar } from "@/components/workflow-sidebar";
+import { workflows, getWorkflowContent } from "@/types/workflow";
+import { ConversationHistory } from "@/components/conversation-history";
 import { ChatInterface } from "@/components/chat-interface";
 import { DataAnalysisPanel } from "@/components/data-analysis-panel";
+import { DashboardHeader } from "@/components/dashboard-header";
+import { cn } from "@/lib/utils";
 
-interface ChatDemoProps {
-  contained?: boolean;
-}
-
-export function ChatDemo({ contained = false }: ChatDemoProps) {
-  const [selectedWorkflow, setSelectedWorkflow] = useState(workflows[0]);
+export function ChatDemo() {
+  // Use the budget optimization workflow (first one) as the fixed workflow
+  const selectedWorkflow = workflows[0];
   const [showDataPanel, setShowDataPanel] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [showFeedbackStage, setShowFeedbackStage] = useState(false);
@@ -69,88 +69,110 @@ export function ChatDemo({ contained = false }: ChatDemoProps) {
     }, 1000);
   };
 
-  const handleWorkflowSelect = (workflow: Workflow) => {
-    if (workflow.status === "active") {
-      setSelectedWorkflow(workflow);
-      // Reset demo when switching workflows
-      restartDemo();
-    }
-  };
-
   const workflowContent = getWorkflowContent(selectedWorkflow);
 
   return (
     <div
-      className={contained ? "w-full h-full" : "w-full max-w-6xl mx-auto px-4"}
+      className="w-full h-full"
+      role="application"
+      aria-label="Cheeky AI Marketing Dashboard Demo"
     >
-      {/* Dashboard Interface - Updated with glass morphism styling */}
+      {/* Skip link for accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-purple-600 text-white px-4 py-2 rounded-lg z-50"
+      >
+        Skip to main content
+      </a>
+
+      {/* Dashboard Interface */}
       <div
-        className={`w-full bg-white/85 dark:bg-gray-900/85 backdrop-blur-sm shadow-xl border border-white/30 dark:border-gray-700/40 flex flex-col overflow-hidden relative ${
-          contained ? "h-full rounded-[inherit]" : "h-[700px] rounded-2xl"
-        }`}
+        className={cn(
+          "w-full h-full flex flex-col overflow-hidden",
+          "bg-white/85 dark:bg-gray-900/85 backdrop-blur-sm",
+          "shadow-xl border border-white/30 dark:border-gray-700/40",
+          "rounded-[inherit] relative",
+          "animate-fade-in opacity-0 [--animation-delay:200ms]"
+        )}
       >
         {/* Subtle gradient overlay */}
         <div
-          className={`absolute inset-0 bg-gradient-to-br from-purple-50/30 via-transparent to-blue-50/30 dark:from-purple-900/10 dark:via-transparent dark:to-blue-900/10 pointer-events-none ${
-            contained ? "rounded-[inherit]" : "rounded-2xl"
-          }`}
+          className={cn(
+            "absolute inset-0 pointer-events-none rounded-[inherit]",
+            "bg-gradient-to-br from-purple-50/30 via-transparent to-blue-50/30",
+            "dark:from-purple-900/10 dark:via-transparent dark:to-blue-900/10"
+          )}
+          aria-hidden="true"
         />
 
-        {/* Dashboard Header - Updated with modern styling */}
-        <div className="relative flex-shrink-0 bg-gradient-to-r from-gray-50/80 to-gray-100/80 dark:from-gray-800/80 dark:to-gray-700/80 backdrop-blur-sm border-b border-gray-200/60 dark:border-gray-700/60 px-4 sm:px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-white text-sm font-bold">C</span>
-              </div>
-              <div>
-                <h3 className="font-bold text-gray-900 dark:text-white text-base">
-                  {selectedWorkflow.title}
-                </h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  FashionCo - Marketing Automation
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={restartDemo}
-              className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/30 dark:to-blue-900/30 text-gray-900 dark:text-white border border-purple-200 dark:border-purple-700 hover:from-purple-100 hover:to-blue-100 dark:hover:from-purple-900/50 dark:hover:to-blue-900/50 px-6 py-3 rounded-xl text-sm font-semibold transition-all duration-300 backdrop-blur-sm shadow-lg"
-            >
-              {currentStep === 0 ? "Start Demo" : "Replay Demo"}
-            </button>
-          </div>
-        </div>
+        {/* Dashboard Header */}
+        <DashboardHeader
+          currentStep={currentStep}
+          onRestartDemo={restartDemo}
+        />
 
-        {/* Dashboard Content */}
-        <div className="relative flex flex-1 min-h-0">
-          {/* Left Sidebar - Workflows */}
-          <WorkflowSidebar
-            selectedWorkflow={selectedWorkflow}
-            onWorkflowSelect={handleWorkflowSelect}
-          />
+        {/* Dashboard Content - Three Panel Layout */}
+        <main
+          id="main-content"
+          role="main"
+          aria-label="Dashboard main content"
+          className={cn(
+            "relative flex flex-1 min-h-0",
+            "animate-fade-up opacity-0 [--animation-delay:600ms]"
+          )}
+        >
+          {/* Left Panel - Conversation History */}
+          <aside
+            role="navigation"
+            aria-label="Conversation history"
+            className={cn(
+              "hidden md:block",
+              "translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1000ms]"
+            )}
+          >
+            <ConversationHistory currentStep={currentStep} />
+          </aside>
 
-          {/* Middle - Chat Interface */}
-          <ChatInterface
-            selectedWorkflow={selectedWorkflow}
-            workflowContent={workflowContent}
-            showDataPanel={showDataPanel}
-            currentStep={currentStep}
-            showFeedbackStage={showFeedbackStage}
-            showImprovedRecommendation={showImprovedRecommendation}
-            onUserMessageSent={handleUserMessageSent}
-            onDataGatheringComplete={handleDataGatheringComplete}
-            onFeedbackProcessingComplete={handleFeedbackProcessingComplete}
-          />
+          {/* Middle Panel - Chat Interface */}
+          <section
+            role="region"
+            aria-label="Chat interface"
+            className={cn(
+              "flex-1 min-w-0",
+              "translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1100ms]"
+            )}
+          >
+            <ChatInterface
+              selectedWorkflow={selectedWorkflow}
+              workflowContent={workflowContent}
+              showDataPanel={showDataPanel}
+              currentStep={currentStep}
+              showFeedbackStage={showFeedbackStage}
+              showImprovedRecommendation={showImprovedRecommendation}
+              onUserMessageSent={handleUserMessageSent}
+              onDataGatheringComplete={handleDataGatheringComplete}
+              onFeedbackProcessingComplete={handleFeedbackProcessingComplete}
+            />
+          </section>
 
-          {/* Right Side - Data Analysis Panel */}
-          <DataAnalysisPanel
-            selectedWorkflow={selectedWorkflow}
-            workflowContent={workflowContent}
-            showDataPanel={showDataPanel}
-            currentStep={currentStep}
-            showImprovedRecommendation={feedbackProcessingComplete}
-          />
-        </div>
+          {/* Right Panel - Data Analysis Panel */}
+          <aside
+            role="complementary"
+            aria-label="Data analysis panel"
+            className={cn(
+              "hidden lg:block",
+              "translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1200ms]"
+            )}
+          >
+            <DataAnalysisPanel
+              selectedWorkflow={selectedWorkflow}
+              workflowContent={workflowContent}
+              showDataPanel={showDataPanel}
+              currentStep={currentStep}
+              showImprovedRecommendation={feedbackProcessingComplete}
+            />
+          </aside>
+        </main>
       </div>
     </div>
   );

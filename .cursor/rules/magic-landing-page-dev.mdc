@@ -1,8 +1,6 @@
 ---
-alwaysApply: true
-description: Complete development guide for Magic Landing Page project
+alwaysApply: false
 ---
-
 # Magic Landing Page Development Guide
 
 ## Project Overview
