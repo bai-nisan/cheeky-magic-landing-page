@@ -5,7 +5,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { MessageList } from "./message-list";
-import { TypingIndicator } from "./typing-indicator";
 
 export interface Message {
   id: string;
@@ -37,7 +36,7 @@ export function Chat({
   append,
   className,
 }: ChatProps) {
-  const isTyping = isGenerating;
+  const isTyping = false; // Removed typing indicator from demo
   const isEmpty = messages.length === 0;
 
   return (
