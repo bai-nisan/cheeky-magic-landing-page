@@ -4,6 +4,7 @@
 import { BorderBeam } from "@/components/magicui/border-beam";
 import TextShimmer from "@/components/magicui/text-shimmer";
 import { Button } from "@/components/ui/button";
+import { ChatDemo } from "@/components/ChatDemo";
 import { ArrowRightIcon } from "@radix-ui/react-icons";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
@@ -52,16 +53,9 @@ export default function HeroSection() {
             colorTo="var(--color-two)"
           />
 
-          <img
-            src="/hero-dark.png"
-            alt="Hero Image"
-            className="hidden relative w-full h-full rounded-[inherit] border object-contain dark:block"
-          />
-          <img
-            src="/hero-light.png"
-            alt="Hero Image"
-            className="block relative w-full h-full  rounded-[inherit] border object-contain dark:hidden"
-          />
+          <div className="relative w-full h-full rounded-[inherit] border bg-white dark:bg-gray-900 overflow-hidden">
+            <ChatDemo />
+          </div>
         </div>
       </div>
     </section>
