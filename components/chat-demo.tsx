@@ -155,7 +155,7 @@ export function ChatDemo() {
           {/* Right Sidebar - Analytics Panel */}
           <Sidebar
             side="right"
-            width="400px"
+            width="50%"
             collapsible={true}
             defaultCollapsed={!hasReceivedFirstResponse}
             className={cn(

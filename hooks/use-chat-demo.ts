@@ -69,27 +69,27 @@ export function useChatDemo({
         // Show actual analysis results once complete
         let aiContent = "**Analysis Complete** - I've identified 3 high-impact optimizations for your Valentine's Day campaigns:\n\n"
         
-        aiContent += "**🎯 Priority Action Items:**\n\n"
-        aiContent += "**1. Reallocate Budget to Brand Campaigns (+25%)**\n"
-        aiContent += "   • Current Brand CPA: ₪216 vs Generic: ₪747\n"
-        aiContent += "   • Expected impact: +15 conversions, -₪312 weekly cost\n"
-        aiContent += "   • Confidence: High (99.25% impression share)\n\n"
+        aiContent += "**Priority Action Items:**\n\n"
+        aiContent += "**1. Scale Demand Gen Campaigns (+$1,200)**\n"
+        aiContent += "   • Current Demand Gen CPA: $58 vs Generic: $202\n"
+        aiContent += "   • Expected impact: +21 conversions, $1,200 investment\n"
+        aiContent += "   • Confidence: High (highest intent audience targeting)\n\n"
         
-        aiContent += "**2. Reduce Generic Campaign Spend (-15%)**\n"
-        aiContent += "   • Current performance: ₪747 CPA at 45% impression share\n"
-        aiContent += "   • Reason: Poor marginal return on next dollar\n"
-        aiContent += "   • Confidence: High (textbook reallocation)\n\n"
+        aiContent += "**2. Boost Competitor Defense (+$500)**\n"
+        aiContent += "   • Current Competitor CPA: $169 at 60% impression share\n"
+        aiContent += "   • Reason: Block H&M/Zara from capturing searchers\n"
+        aiContent += "   • Confidence: High (strategic defensive value)\n\n"
         
-        aiContent += "**3. Maintain Competitor Campaigns (Current Level)**\n"
-        aiContent += "   • Strategic value for Valentine's gift market\n"
-        aiContent += "   • 60% impression share allows for future scaling\n"
-        aiContent += "   • Confidence: Medium (seasonal context important)\n\n"
+        aiContent += "**3. Maintain Pure Brand (Defensive Focus)**\n"
+        aiContent += "   • Current Pure Brand CPA: $287 (defensive only)\n"
+        aiContent += "   • Purpose: Prevent competitors, not optimize conversions\n"
+        aiContent += "   • Confidence: High (expert-validated strategy)\n\n"
         
-        aiContent += "**📈 Expected Weekly Impact:**"
-        aiContent += "• +15 conversions from brand campaign focus"
-        aiContent += "• -₪312 cost reduction from generic reallocation"
-        aiContent += "• 12% improvement in overall ROAS"
-        aiContent += "**Ready to implement? I can make these changes automatically or walk you through each step.**"
+        aiContent += "**Expected Weekly Impact:**\n"
+        aiContent += "• +21 conversions from Demand Gen scaling\n"
+        aiContent += "• Enhanced competitor blocking from defense boost\n"
+        aiContent += "• 15% improvement in overall ROAS\n\n"
+        aiContent += "**Ready to implement?** I can make these changes automatically or walk you through each step."
 
         messageArray.push({
           id: "ai-1",
