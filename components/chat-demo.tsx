@@ -165,7 +165,7 @@ export function ChatDemo() {
             aria-label="Chat interface"
             className={cn(
               "flex-1 min-w-0 flex flex-col overflow-hidden",
-              "translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1000ms]"
+              "animate-fade-in opacity-0 [--animation-delay:1000ms]"
             )}
           >
             <ChatInterface
@@ -191,7 +191,7 @@ export function ChatDemo() {
               "hidden lg:flex z-10",
               "border-l border-border",
               "bg-background",
-              "translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1100ms]"
+              "animate-fade-in opacity-0 [--animation-delay:1100ms]"
             )}
           >
             <AnalyticsSidebarHeader />
