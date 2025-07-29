@@ -20,14 +20,16 @@ function AnalyticsSidebarHeader() {
   const { isCollapsed } = useSidebar();
 
   return (
-    <SidebarHeader className="bg-background border-l border-b px-4 sm:px-6 py-3 mt-0">
+    <SidebarHeader className="bg-muted/50 border-b border-border/50 px-3 py-2 mt-0">
       <SidebarTrigger>
         <PanelRightClose className="h-4 w-4" />
       </SidebarTrigger>
       {!isCollapsed && (
         <div className="flex items-center gap-2 flex-1 justify-end">
-          <span className="font-semibold text-card-foreground">Analytics</span>
-          <BarChart3 className="h-5 w-5 text-primary" />
+          <span className="font-medium text-muted-foreground text-sm">
+            Analytics
+          </span>
+          <BarChart3 className="h-4 w-4 text-muted-foreground" />
         </div>
       )}
     </SidebarHeader>
