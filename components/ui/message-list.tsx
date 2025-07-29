@@ -19,12 +19,13 @@ export function MessageList({ messages, isTyping }: MessageListProps) {
     }
   };
 
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      scrollToBottom();
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [messages, isTyping]);
+  // Disable auto-scroll for demo to prevent page jumping
+  // React.useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     scrollToBottom();
+  //   }, 100);
+  //   return () => clearTimeout(timer);
+  // }, [messages, isTyping]);
 
   return (
     <div
