@@ -70,7 +70,7 @@ export function useChatDemo({
       const totalSteps = gatheringSteps.length
       
       if (completedSteps >= 3) {
-        aiContent += "**Priority Action Items:**\n\n"
+        aiContent += "**🎯 Priority Action Items:**\n\n"
         aiContent += "**1. Reallocate Budget to Brand Campaigns (+25%)**\n"
         aiContent += "   • Current Brand CPA: ₪216 vs Generic: ₪747\n"
         aiContent += "   • Expected impact: +15 conversions, -₪312 weekly cost\n"
@@ -89,19 +89,18 @@ export function useChatDemo({
       
       // Show data gathering progress for incomplete steps
       if (completedSteps < totalSteps) {
-        aiContent += "**Strategic Analysis Progress:**\n\n"
+        aiContent += "**📊 Strategic Analysis Progress:**\n\n"
         gatheringSteps.forEach((step, index) => {
           const statusIcon = step.status === "complete" ? "✅" : step.status === "connecting" ? "⏳" : "⏸️"
           if (index < completedSteps + 1) {
-            const cleanIcon = step.status === "complete" ? "[Complete]" : step.status === "connecting" ? "[Processing]" : "[Pending]"
-            aiContent += `${cleanIcon} ${step.platform}: Analyzing campaign performance hierarchy\n`
+            aiContent += `${statusIcon} ${step.platform}: Analyzing campaign performance hierarchy\n`
           }
         })
         aiContent += "\n"
       }
       
       if (completedSteps >= totalSteps) {
-        aiContent += "**Expected Weekly Impact:**\n"
+        aiContent += "**📈 Expected Weekly Impact:**\n"
         aiContent += "• +15 conversions from brand campaign focus\n"
         aiContent += "• -₪312 cost reduction from generic reallocation\n"
         aiContent += "• 12% improvement in overall ROAS\n\n"
@@ -134,18 +133,17 @@ export function useChatDemo({
       const totalFeedbackSteps = feedbackProcessingSteps.length
       
       if (completedFeedbackSteps >= 2) {
-        feedbackContent += "**Context Learned:**\n"
+        feedbackContent += "**🧠 Context Learned:**\n"
         feedbackContent += "• Valentine's Day = gift purchase behavior priority\n"
         feedbackContent += "• Brand campaigns perform better for gift buyers\n"
         feedbackContent += "• Seasonal campaign strategy now saved to your profile\n\n"
       }
       
-      feedbackContent += "**Strategy Updates:**\n\n"
+      feedbackContent += "**🔄 Strategy Updates:**\n\n"
       feedbackProcessingSteps.forEach((step, index) => {
         const statusIcon = step.status === "complete" ? "✅" : step.status === "connecting" ? "⏳" : "⏸️"
         if (index < completedFeedbackSteps + 1) {
-          const cleanIcon = step.status === "complete" ? "[Complete]" : step.status === "connecting" ? "[Processing]" : "[Pending]"
-          feedbackContent += `${cleanIcon} ${step.platform}: ${step.message}\n`
+          feedbackContent += `${statusIcon} ${step.platform}: ${step.message}\n`
         }
       })
 
@@ -162,7 +160,7 @@ export function useChatDemo({
       messageArray.push({
         id: "ai-3",
         role: "assistant",
-        content: "**Strategy Updated**\n\n**New Allocation:**\n• Brand campaigns: +35% (was +25%)\n• Generic campaigns: -25% (was -15%)\n• Competitor campaigns: Maintained\n\n**Context Saved:**\n*I'll remember your Valentine's Day gift campaign preferences for future seasonal optimizations.*\n\n**Trust Level:** Increased - You can now approve seasonal adjustments automatically.",
+        content: "**Strategy Updated** ✅\n\n**New Allocation:**\n• Brand campaigns: +35% (was +25%)\n• Generic campaigns: -25% (was -15%)\n• Competitor campaigns: Maintained\n\n**Context Saved:**\n*I'll remember your Valentine's Day gift campaign preferences for future seasonal optimizations.*\n\n**Trust Level:** Increased - You can now approve seasonal adjustments automatically.",
         timestamp: "10 sec ago",
       })
     }
