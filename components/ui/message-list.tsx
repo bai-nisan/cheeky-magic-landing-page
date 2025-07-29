@@ -3,37 +3,23 @@
 import * as React from "react";
 import { Message } from "./chat";
 import { cn } from "@/lib/utils";
+import { MessageSkeleton } from "@/components/ui/skeleton";
 
 interface MessageListProps {
   messages: Message[];
-  isTyping?: boolean;
 }
 
-export function MessageList({ messages, isTyping }: MessageListProps) {
+export function MessageList({ messages }: MessageListProps) {
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
-
-  const scrollToBottom = () => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  };
-
-  // Disable auto-scroll for demo to prevent page jumping
-  // React.useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     scrollToBottom();
-  //   }, 100);
-  //   return () => clearTimeout(timer);
-  // }, [messages, isTyping]);
 
   return (
     <div
       ref={containerRef}
-      className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-4"
+      className="flex-1 overflow-y-auto overflow-x-hidden px-8 py-6 space-y-8"
       style={{ height: "100%" }}
     >
-      <div className="space-y-4">
+      <div className="max-w-3xl mx-auto space-y-8">
         {messages.map((message, index) => (
           <ChatMessageItem
             key={message.id}
@@ -67,53 +53,41 @@ function ChatMessageItem({ message, isFirst = false }: ChatMessageItemProps) {
   const formattedContent = formatMessageContent(message.content);
 
   return (
-    <div
-      className={cn(
-        "flex",
-        isUser ? "justify-end" : "justify-start",
-        isFirst && "pt-2"
-      )}
-    >
+    <div className={cn("w-full", isFirst && "pt-2")}>
       {isUser ? (
-        <div
-          className={cn(
-            "max-w-[80%] rounded-2xl px-4 py-3 text-sm",
-            "bg-primary text-primary-foreground",
-            "rounded-br-md"
-          )}
-        >
-          <div className="whitespace-pre-wrap text-left">
-            {formattedContent}
-          </div>
-          {message.timestamp && (
-            <div className="text-xs opacity-70 mt-1 text-left">
-              {message.timestamp}
+        <div className="w-full text-left">
+          {/* User message - with bubble for differentiation */}
+          <div className="inline-block max-w-[85%] rounded-lg px-4 py-3 text-sm bg-primary text-primary-foreground">
+            <div className="whitespace-pre-wrap leading-relaxed text-left">
+              {formattedContent}
             </div>
-          )}
+          </div>
         </div>
       ) : isSystem ? (
-        <div
-          className={cn(
-            "max-w-[80%] rounded-lg px-4 py-2 text-sm",
-            "bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 text-yellow-800 dark:text-yellow-200",
-            "rounded-bl-sm"
-          )}
-        >
-          <div className="whitespace-pre-wrap">{formattedContent}</div>
-          {message.timestamp && (
-            <div className="text-xs opacity-70 mt-1">{message.timestamp}</div>
-          )}
+        <div className="w-full text-left">
+          <div
+            className={cn(
+              "rounded-lg px-4 py-3 text-sm text-left",
+              "bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 text-yellow-800 dark:text-yellow-200"
+            )}
+          >
+            <div className="whitespace-pre-wrap text-left">
+              {formattedContent}
+            </div>
+          </div>
         </div>
       ) : (
-        <div className="max-w-[85%] text-sm text-foreground text-left">
-          <div className="prose prose-sm max-w-none dark:prose-invert whitespace-pre-wrap">
-            <MessageContent content={formattedContent} />
-          </div>
-          {message.timestamp && (
-            <div className="text-xs opacity-60 mt-2 text-muted-foreground text-left">
-              {message.timestamp}
+        <div className="w-full text-left">
+          {/* AI message - blended background style (no bubble) */}
+          <div className="text-sm text-foreground">
+            <div className="prose prose-sm max-w-none dark:prose-invert whitespace-pre-wrap leading-relaxed text-left">
+              {message.isLoading ? (
+                <MessageSkeleton />
+              ) : (
+                <MessageContent content={formattedContent} />
+              )}
             </div>
-          )}
+          </div>
         </div>
       )}
     </div>
@@ -125,7 +99,7 @@ function MessageContent({ content }: { content: string }) {
   const parts = content.split(/(\*\*.*?\*\*)/g);
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       {parts.map((part, index) => {
         if (part.startsWith("**") && part.endsWith("**")) {
           const text = part.slice(2, -2);
@@ -144,18 +118,29 @@ function MessageContent({ content }: { content: string }) {
               {lines.map((line, lineIndex) => {
                 if (line.trim().startsWith("•")) {
                   return (
-                    <div key={lineIndex} className="ml-4 text-muted-foreground">
+                    <div
+                      key={lineIndex}
+                      className="ml-4 text-muted-foreground leading-relaxed"
+                    >
                       {line.trim()}
                     </div>
                   );
                 }
-                return line ? <div key={lineIndex}>{line}</div> : null;
+                return line ? (
+                  <div key={lineIndex} className="leading-relaxed">
+                    {line}
+                  </div>
+                ) : null;
               })}
             </div>
           );
         }
 
-        return part ? <span key={index}>{part}</span> : null;
+        return part ? (
+          <span key={index} className="leading-relaxed">
+            {part}
+          </span>
+        ) : null;
       })}
     </div>
   );

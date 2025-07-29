@@ -12,6 +12,8 @@ This is a Next.js 15.3.5 landing page template built with modern React patterns,
 - **Components**: Shadcn/ui (New York style) + Magic UI animation components
 - **TypeScript**: Strict configuration with path aliases
 - **Theme**: Dark-first design with next-themes provider
+- **Chat Demo**: Interactive AX (Agentic Experience) demonstration with strategic AI recommendations
+- **Analytics Integration**: Real-time reasoning engine showing decision framework and context learning
 
 ## Architecture & File Structure
 
@@ -43,8 +45,184 @@ components/
 │   ├── text-shimmer.tsx
 │   └── sphere-mask.tsx
 ├── ui/                 # Shadcn/ui base components
+│   ├── chat.tsx        # Main chat container components
+│   ├── message-list.tsx # Message rendering and scrolling
+│   ├── sidebar.tsx     # Collapsible sidebar component
+│   └── data-analysis-panel.tsx # Analytics reasoning display
+├── chat-demo.tsx       # Main chat demo orchestrator
+├── chat-interface.tsx  # Chat interface wrapper
+├── data-analysis-panel.tsx # Strategic reasoning sidebar
 └── site-*.tsx          # Site-wide components (header, footer, banner)
 ```
+
+## Chat Demo & AX Implementation
+
+### Agentic Experience (AX) Principles
+
+The chat demo implements **Agentic Experience** rather than traditional UX patterns:
+
+#### Core AX Patterns
+- **Relationship Building**: Context accumulation over time, not stateless interactions
+- **Trust Gradient**: Progressive confidence and transparency levels
+- **Strategic Partnership**: AI acts as expert teammate, not just tool
+- **Domain Expertise**: Embedded optimization guidelines and reasoning
+
+#### Chat vs Analytics Split
+- **Chat Interface**: Action-oriented recommendations with strategic reasoning
+- **Analytics Sidebar**: Decision framework and reasoning engine behind recommendations
+
+### Chat Demo Architecture
+
+#### Container Hierarchy (Critical for Scrolling)
+```tsx
+ChatInterface (min-h-0, overflow-hidden)
+  ↓
+ChatContainer (h-full, flex-col, overflow-hidden) 
+  ↓
+ChatMessages (h-full, overflow-hidden)
+  ↓  
+MessageList (overflow-y-auto) ← Handles actual scrolling
+```
+
+#### Key Components
+
+**ChatDemo Component:**
+- Orchestrates the entire demo flow
+- Manages step progression and state
+- Coordinates between chat and analytics
+
+**ChatInterface Component:**
+- Wrapper for the chat experience
+- Handles scrolling container setup
+- Manages demo flow integration
+
+**MessageList Component:**
+- Implements scrollable message display
+- Handles markdown-style formatting
+- Removes emojis and applies clean styling
+- Uses proper height constraints for scrolling
+
+### Message Content Patterns
+
+#### Content Transformation (AX Focus)
+```tsx
+// BEFORE (Tool-like): Generic status updates
+"✅ Meta Ads: Connected and analyzing performance"
+
+// AFTER (AX): Strategic action items
+"**Priority Action Items:**
+**1. Reallocate Budget to Brand Campaigns (+25%)**
+   • Current Brand CPA: ₪216 vs Generic: ₪747
+   • Expected impact: +15 conversions, -₪312 weekly cost
+   • Confidence: High (99.25% impression share)"
+```
+
+#### Message Formatting Standards
+- **Bold Text**: Use `**text**` markdown syntax
+- **Bullet Points**: Use `•` for consistent formatting
+- **No Emojis**: Clean, professional appearance
+- **Structured Content**: Clear hierarchy with headers and sections
+
+#### MessageContent Component Pattern
+```tsx
+function MessageContent({ content }: { content: string }) {
+  // Split on markdown bold patterns
+  const parts = content.split(/(\*\*.*?\*\*)/g);
+  
+  return (
+    <div className="space-y-3">
+      {parts.map((part, index) => {
+        if (part.startsWith("**") && part.endsWith("**")) {
+          return <strong key={index}>{text}</strong>;
+        }
+        // Handle bullet points and regular content
+      })}
+    </div>
+  );
+}
+```
+
+### Analytics Panel Architecture
+
+#### Strategic Reasoning Sections
+1. **Decision Framework**: Shows methodology (marginal cost optimization)
+2. **Performance Hierarchy**: Campaign ranking with purchase intent analysis  
+3. **Strategic Context**: Accumulated business rules and seasonal factors
+4. **Confidence & Risk**: Transparency into decision quality
+
+#### Trust Building Elements
+```tsx
+// Context Learning Display
+{showImprovedRecommendation ? (
+  <span className="text-foreground">
+    <strong>Learned:</strong> Valentine's Day = gift purchase priority
+  </span>
+) : (
+  <span className="text-muted-foreground">
+    Seasonal factor: Valentine's Day (+40% gift searches)
+  </span>
+)}
+```
+
+### Scrolling Implementation
+
+#### Critical Requirements
+- **Height Constraints**: Each container must have `min-h-0` or `h-full`
+- **Overflow Handling**: Parent containers use `overflow-hidden`, scroll container uses `overflow-y-auto`
+- **Flex Layout**: Proper flex-1 and flex-col setup throughout hierarchy
+
+#### Common Scrolling Issues
+```tsx
+// ❌ WRONG: Missing height constraints
+<div className="flex-1">
+  <div className="overflow-y-auto">Messages</div>
+</div>
+
+// ✅ CORRECT: Proper height flow
+<div className="flex-1 h-full min-h-0 overflow-hidden">
+  <div className="flex-1 overflow-y-auto">Messages</div>
+</div>
+```
+
+### UI Consistency Standards
+
+#### Chat Bubbles
+- **User Messages**: `rounded-lg` bubbles with primary background
+- **AI Messages**: No bubble, blend with background
+- **System Messages**: Yellow background with border
+
+#### Spacing & Typography
+- **Container Padding**: `px-8 py-6` for consistent spacing
+- **Message Spacing**: `space-y-8` between messages
+- **Line Height**: `leading-relaxed` for readability
+
+### Demo Flow Patterns
+
+#### State Management
+- Use `useDemoFlow` hook for step progression
+- Coordinate timing between chat and analytics
+- Handle auto-progression without user interaction
+
+#### AX-Specific States
+- **Context Learning**: Show knowledge accumulation
+- **Trust Calibration**: Display confidence changes
+- **Relationship Building**: Demonstrate progressive partnership
+
+### Development Guidelines
+
+#### Adding New AX Features
+1. **Start with Strategic Value**: What business insight does this provide?
+2. **Show Reasoning**: Always display why, not just what
+3. **Build Context**: How does this accumulate knowledge?
+4. **Demonstrate Trust**: How does confidence evolve?
+
+#### Testing AX Components
+- **Relationship Progression**: Does trust build over interactions?
+- **Context Accumulation**: Is learning visible and persistent?
+- **Strategic Value**: Do recommendations feel expert-level?
+- **Professional Appearance**: Clean, emoji-free, well-formatted
+
+---
 
 ## Development Patterns & Best Practices
 
@@ -231,6 +409,7 @@ npm run lint                    # ESLint checking
 
 ## Key Files Reference
 
+### Core Application
 - **Main Layout**: [app/layout.tsx](mdc:app/layout.tsx)
 - **Landing Page**: [app/(marketing)/page.tsx](mdc:app/(marketing)/page.tsx)
 - **Utils**: [lib/utils.ts](mdc:lib/utils.ts)
@@ -238,6 +417,16 @@ npm run lint                    # ESLint checking
 - **TypeScript Config**: [tsconfig.json](mdc:tsconfig.json)
 - **Package Config**: [package.json](mdc:package.json)
 - **Global Styles**: [app/globals.css](mdc:app/globals.css)
+
+### Chat Demo & AX Implementation
+- **Chat Demo Orchestrator**: [components/chat-demo.tsx](mdc:components/chat-demo.tsx)
+- **Chat Interface**: [components/chat-interface.tsx](mdc:components/chat-interface.tsx)
+- **Analytics Panel**: [components/data-analysis-panel.tsx](mdc:components/data-analysis-panel.tsx)
+- **Message List**: [components/ui/message-list.tsx](mdc:components/ui/message-list.tsx)
+- **Chat Components**: [components/ui/chat.tsx](mdc:components/ui/chat.tsx)
+- **Demo Flow Hook**: [hooks/use-chat-demo.ts](mdc:hooks/use-chat-demo.ts)
+- **Demo State Hook**: [hooks/use-demo-flow.ts](mdc:hooks/use-demo-flow.ts)
+- **Workflow Types**: [types/workflow.ts](mdc:types/workflow.ts)
 
 ---
 

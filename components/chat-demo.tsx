@@ -41,17 +41,12 @@ export function ChatDemo() {
   const selectedWorkflow = workflows[0];
   const [showDataPanel, setShowDataPanel] = useState(true); // Always show for constant size
   const [currentStep, setCurrentStep] = useState(0);
-  const [showFeedbackStage, setShowFeedbackStage] = useState(false);
-  const [showImprovedRecommendation, setShowImprovedRecommendation] =
-    useState(false);
-  const [feedbackProcessingComplete, setFeedbackProcessingComplete] =
-    useState(false);
 
   // New state to track if we've received the first AI response
   const [hasReceivedFirstResponse, setHasReceivedFirstResponse] =
     useState(false);
 
-  // Demo flow: 0 = initial, 1 = user typing, 2 = ai responding/gathering data, 3 = recommendations shown, 4 = feedback, 5 = improved recommendation
+  // Demo flow: 0 = initial, 1 = user typing, 2 = ai responding/gathering data, 3 = recommendations shown
   useEffect(() => {
     // Auto-start demo after page load
     const timer = setTimeout(() => {
@@ -74,32 +69,11 @@ export function ChatDemo() {
     setTimeout(() => {
       setHasReceivedFirstResponse(true);
     }, 1500);
-
-    // Show feedback stage after showing recommendations
-    setTimeout(() => {
-      setCurrentStep(4);
-      setShowFeedbackStage(true);
-
-      // Show improved recommendation after feedback
-      setTimeout(() => {
-        setCurrentStep(5);
-        setShowImprovedRecommendation(true);
-      }, 4000);
-    }, 4000);
-  };
-
-  const handleFeedbackProcessingComplete = () => {
-    setCurrentStep(5);
-    setShowImprovedRecommendation(true);
-    setFeedbackProcessingComplete(true);
   };
 
   const restartDemo = () => {
     setCurrentStep(0);
     // showDataPanel stays true for constant size
-    setShowFeedbackStage(false);
-    setShowImprovedRecommendation(false);
-    setFeedbackProcessingComplete(false);
     // Reset first response state for demo restart
     setHasReceivedFirstResponse(false);
 
@@ -173,11 +147,8 @@ export function ChatDemo() {
               workflowContent={workflowContent}
               showDataPanel={showDataPanel}
               currentStep={currentStep}
-              showFeedbackStage={showFeedbackStage}
-              showImprovedRecommendation={showImprovedRecommendation}
               onUserMessageSent={handleUserMessageSent}
               onDataGatheringComplete={handleDataGatheringComplete}
-              onFeedbackProcessingComplete={handleFeedbackProcessingComplete}
             />
           </section>
 
@@ -201,7 +172,7 @@ export function ChatDemo() {
                 workflowContent={workflowContent}
                 showDataPanel={showDataPanel}
                 currentStep={currentStep}
-                showImprovedRecommendation={feedbackProcessingComplete}
+                showImprovedRecommendation={false}
               />
             </SidebarContent>
           </Sidebar>

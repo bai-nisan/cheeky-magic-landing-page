@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { ChevronUpIcon, PlusIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { MessageList } from "./message-list";
 
@@ -11,32 +12,17 @@ export interface Message {
   role: "user" | "assistant" | "system";
   content: string;
   timestamp?: string;
+  isLoading?: boolean;
 }
 
 interface ChatProps {
   messages: Message[];
-  input: string;
-  handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  handleSubmit: (e: React.FormEvent) => void;
-  isGenerating?: boolean;
-  stop?: () => void;
   suggestions?: string[];
   append?: (message: Message) => void;
   className?: string;
 }
 
-export function Chat({
-  messages,
-  input,
-  handleInputChange,
-  handleSubmit,
-  isGenerating = false,
-  stop,
-  suggestions,
-  append,
-  className,
-}: ChatProps) {
-  const isTyping = false; // Removed typing indicator from demo
+export function Chat({ messages, suggestions, append, className }: ChatProps) {
   const isEmpty = messages.length === 0;
 
   return (
@@ -47,22 +33,9 @@ export function Chat({
 
       {!isEmpty ? (
         <ChatMessages>
-          <MessageList messages={messages} isTyping={isTyping} />
+          <MessageList messages={messages} />
         </ChatMessages>
       ) : null}
-
-      <ChatForm
-        className="mt-auto"
-        isPending={isGenerating || isTyping}
-        handleSubmit={handleSubmit}
-      >
-        <MessageInput
-          value={input}
-          onChange={handleInputChange}
-          stop={stop}
-          isGenerating={isGenerating}
-        />
-      </ChatForm>
     </ChatContainer>
   );
 }
@@ -106,12 +79,9 @@ export function ChatForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className={cn(
-        "flex-shrink-0 border-t border-border p-4 bg-background",
-        className
-      )}
+      className={cn("flex-shrink-0 px-8 py-6 bg-background", className)}
     >
-      {children}
+      <div className="max-w-3xl mx-auto">{children}</div>
     </form>
   );
 }
@@ -171,41 +141,61 @@ export function MessageInput({
   disabled = false,
 }: MessageInputProps) {
   return (
-    <div className="flex items-end space-x-2">
-      <div className="flex-1">
-        <Textarea
-          value={value}
-          onChange={onChange}
-          placeholder="Type your message..."
-          className="min-h-[60px] resize-none"
-          disabled={disabled}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              if (!disabled && value.trim()) {
-                const form = e.currentTarget.closest("form");
-                form?.requestSubmit();
-              }
+    <div className="bg-muted/50 dark:bg-muted/30 border border-border/50 rounded-lg focus-within:ring-2 focus-within:ring-primary/20">
+      {/* Text input row */}
+      <Textarea
+        value={value}
+        onChange={onChange}
+        placeholder="Type your message..."
+        className="min-h-[60px] resize-none border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 pb-1 pt-3"
+        disabled={disabled}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            if (!disabled && value.trim()) {
+              const form = e.currentTarget.closest("form");
+              form?.requestSubmit();
             }
-          }}
-        />
-      </div>
-      <div className="flex space-x-1">
-        {isGenerating ? (
-          <Button
-            type="button"
-            size="sm"
-            variant="outline"
-            onClick={stop}
-            disabled={!stop}
-          >
-            Stop
-          </Button>
-        ) : (
-          <Button type="submit" size="sm" disabled={disabled || !value.trim()}>
-            Send
-          </Button>
-        )}
+          }
+        }}
+      />
+
+      {/* Buttons row */}
+      <div className="flex items-center justify-between px-3 pb-3">
+        {/* Left side - Plus button */}
+        <Button
+          type="button"
+          size="icon"
+          variant="ghost"
+          className="size-8 border border-border/50 hover:border-border/50"
+        >
+          <PlusIcon className="h-4 w-4" />
+        </Button>
+
+        {/* Right side - Send/Stop button */}
+        <div>
+          {isGenerating ? (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              onClick={stop}
+              disabled={!stop}
+              className="h-8 px-3"
+            >
+              Stop
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              size="icon"
+              disabled={disabled || !value.trim()}
+              className="size-8 bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              <ChevronUpIcon className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

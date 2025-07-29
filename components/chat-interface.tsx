@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Workflow, WorkflowContent } from "@/types/workflow";
-import { Chat } from "@/components/ui/chat";
+import { Chat, MessageInput } from "@/components/ui/chat";
 import { useChatDemo } from "@/hooks/use-chat-demo";
 
 interface ChatInterfaceProps {
@@ -10,11 +10,8 @@ interface ChatInterfaceProps {
   workflowContent: WorkflowContent;
   showDataPanel: boolean;
   currentStep: number;
-  showFeedbackStage: boolean;
-  showImprovedRecommendation: boolean;
   onUserMessageSent?: () => void;
   onDataGatheringComplete?: () => void;
-  onFeedbackProcessingComplete?: () => void;
 }
 
 export function ChatInterface({
@@ -22,11 +19,8 @@ export function ChatInterface({
   workflowContent,
   showDataPanel,
   currentStep,
-  showFeedbackStage,
-  showImprovedRecommendation,
   onUserMessageSent,
   onDataGatheringComplete,
-  onFeedbackProcessingComplete,
 }: ChatInterfaceProps) {
   const {
     messages,
@@ -41,7 +35,6 @@ export function ChatInterface({
     currentStep,
     onUserMessageSent,
     onDataGatheringComplete,
-    onFeedbackProcessingComplete,
   });
 
   const suggestions =
@@ -58,13 +51,21 @@ export function ChatInterface({
       {/* Chat Interface */}
       <Chat
         messages={messages}
-        input={input}
-        handleInputChange={handleInputChange}
-        handleSubmit={handleSubmit}
-        isGenerating={isGenerating}
         suggestions={suggestions}
         className="flex-1 h-full"
       />
+
+      {/* Input Form */}
+      <form onSubmit={handleSubmit} className="flex-shrink-0 px-8 pb-6">
+        <div className="max-w-3xl mx-auto">
+          <MessageInput
+            value={input}
+            onChange={handleInputChange}
+            isGenerating={isGenerating}
+            disabled={isInputDisabled}
+          />
+        </div>
+      </form>
     </div>
   );
 }
