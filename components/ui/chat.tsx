@@ -75,14 +75,21 @@ export function ChatContainer({
   className?: string;
 }) {
   return (
-    <div className={cn("flex flex-1 flex-col overflow-hidden", className)}>
+    <div
+      className={cn(
+        "flex flex-1 flex-col h-full min-h-0 overflow-hidden",
+        className
+      )}
+    >
       {children}
     </div>
   );
 }
 
 export function ChatMessages({ children }: { children: React.ReactNode }) {
-  return <div className="flex-1 min-h-0">{children}</div>;
+  return (
+    <div className="flex-1 min-h-0 h-full overflow-hidden">{children}</div>
+  );
 }
 
 export function ChatForm({
@@ -100,7 +107,7 @@ export function ChatForm({
     <form
       onSubmit={handleSubmit}
       className={cn(
-        "flex-shrink-0 border-t border-gray-100 dark:border-gray-700 p-3 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm",
+        "flex-shrink-0 border-t border-border p-4 bg-background",
         className
       )}
     >

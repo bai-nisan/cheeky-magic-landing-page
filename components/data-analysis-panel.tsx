@@ -18,243 +18,302 @@ export function DataAnalysisPanel({
   showImprovedRecommendation,
 }: DataAnalysisPanelProps) {
   return (
-    <div className="w-full h-full flex flex-col overflow-hidden relative">
-      {/* Panel Header */}
-      <div className="p-3 border-b border-white/40 dark:border-gray-600/40 flex-shrink-0">
-        <h4 className="font-medium text-gray-900 dark:text-white text-sm">
-          {workflowContent.analysisTitle}
-        </h4>
-        <p className="text-xs text-gray-500 dark:text-gray-400">
-          {workflowContent.analysisSubtitle}
-          {showImprovedRecommendation &&
-            selectedWorkflow.status === "active" && (
-              <span className="ml-2 text-purple-600 dark:text-purple-400 font-medium">
-                • Updated
-              </span>
-            )}
-        </p>
-      </div>
-
+    <div className="w-full h-full flex flex-col overflow-hidden relative bg-background">
       {/* Analysis Content */}
-      <div className="flex-1 p-3 space-y-4 overflow-y-auto min-h-0">
+      <div className="flex-1 p-4 space-y-6 overflow-y-auto min-h-0">
         {selectedWorkflow.status === "active" ? (
           <>
-            {/* Data Sources */}
+            {/* Decision Framework */}
             <div>
-              <h5 className="font-medium text-gray-900 dark:text-white mb-2 text-xs relative">
-                Data Sources Analyzed
+              <h5 className="font-medium text-foreground mb-3 text-sm">
+                Decision Framework
               </h5>
-              <div className="grid grid-cols-3 gap-2">
-                <div className="bg-white/60 dark:bg-blue-900/30 backdrop-blur-sm border border-white/40 dark:border-blue-700/40 rounded p-2 text-center">
-                  <div className="w-6 h-6 mx-auto mb-1 flex items-center justify-center">
-                    <PlatformIcon
-                      platform="meta"
-                      variant="simple"
-                      size={20}
-                      className="text-blue-600 dark:text-blue-400"
-                    />
-                  </div>
-                  <p className="text-xs font-medium text-gray-900 dark:text-white">
-                    Meta Ads
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    Active
-                  </p>
-                </div>
-                <div className="bg-green-50 dark:bg-green-900/30 rounded p-2 text-center">
-                  <div className="w-6 h-6 mx-auto mb-1 flex items-center justify-center">
-                    <PlatformIcon
-                      platform="google"
-                      variant="simple"
-                      size={20}
-                    />
-                  </div>
-                  <p className="text-xs font-medium text-gray-900 dark:text-white">
-                    Google Ads
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    Active
-                  </p>
-                </div>
-                <div className="bg-purple-50 dark:bg-purple-900/30 rounded p-2 text-center">
-                  <div className="w-6 h-6 mx-auto mb-1 flex items-center justify-center">
-                    <PlatformIcon
-                      platform="shopify"
-                      variant="simple"
-                      size={20}
-                    />
-                  </div>
-                  <p className="text-xs font-medium text-gray-900 dark:text-white">
-                    Shopify
-                  </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    Synced
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Key Insights */}
-            <div>
-              <h5 className="font-medium text-gray-900 dark:text-white mb-2 text-xs relative">
-                Key Insights
-              </h5>
-              <div className="space-y-2">
-                <div className="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded p-2">
-                  <div className="flex items-start space-x-2">
-                    <div className="w-3 h-3 bg-yellow-500 dark:bg-yellow-400 rounded-full flex items-center justify-center mt-0.5">
-                      <span className="text-white text-xs">!</span>
-                    </div>
-                    <div>
-                      <p className="text-xs font-medium text-yellow-800 dark:text-yellow-200">
-                        Valentine&apos;s Day Opportunity
-                      </p>
-                      <p className="text-xs text-yellow-700 dark:text-yellow-300">
-                        +40% increase in gift-related searches
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded p-2">
-                  <div className="flex items-start space-x-2">
-                    <div className="w-3 h-3 bg-blue-500 dark:bg-blue-400 rounded-full flex items-center justify-center mt-0.5">
-                      <span className="text-white text-xs">₪</span>
-                    </div>
-                    <div>
-                      <p className="text-xs font-medium text-blue-800 dark:text-blue-200">
-                        CPA Performance Gap
-                      </p>
-                      <p className="text-xs text-blue-700 dark:text-blue-300">
-                        Brand: ₪216 vs Generic: ₪747
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* New insight for refined recommendations */}
-                {showImprovedRecommendation && (
-                  <div className="bg-purple-50 dark:bg-purple-900/30 border border-purple-200 dark:border-purple-700 rounded p-2">
-                    <div className="flex items-start space-x-2">
-                      <div className="w-3 h-3 bg-purple-500 dark:bg-purple-400 rounded-full flex items-center justify-center mt-0.5">
-                        <span className="text-white text-xs font-bold">G</span>
-                      </div>
-                      <div>
-                        <p className="text-xs font-medium text-purple-800 dark:text-purple-200">
-                          Gift Purchase Intent
-                        </p>
-                        <p className="text-xs text-purple-700 dark:text-purple-300">
-                          Brand campaigns: 3x higher gift conversion
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Recommendations */}
-            <div>
-              <h5 className="font-medium text-gray-900 dark:text-white mb-2 text-xs">
-                AI Recommendations
-                {showImprovedRecommendation && (
-                  <span className="ml-2 text-purple-600 dark:text-purple-400 font-medium text-xs">
-                    • Refined
-                  </span>
-                )}
-              </h5>
-              <div
-                className={`${
-                  showImprovedRecommendation
-                    ? "bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/30 dark:to-blue-900/30 border-purple-200 dark:border-purple-700"
-                    : "bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/30 dark:to-blue-900/30 border-green-200 dark:border-green-700"
-                } rounded p-3 border`}
-              >
-                <div className="flex items-start space-x-2">
-                  <div
-                    className={`w-5 h-5 ${
-                      showImprovedRecommendation
-                        ? "bg-gradient-to-br from-purple-500 to-blue-500 dark:from-purple-400 dark:to-blue-400"
-                        : "bg-gradient-to-br from-green-500 to-blue-500 dark:from-green-400 dark:to-blue-400"
-                    } rounded flex items-center justify-center`}
-                  >
-                    <span className="text-white text-xs font-bold">
-                      {showImprovedRecommendation ? "R" : "A"}
+              <div className="bg-card border border-border rounded-lg p-4 space-y-3">
+                <div className="text-xs space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">
+                      Analysis Method:
+                    </span>
+                    <span className="text-foreground font-medium">
+                      Marginal Cost Optimization
                     </span>
                   </div>
-                  <div className="flex-1">
-                    <h6 className="font-medium text-gray-900 dark:text-white mb-1 text-xs">
-                      {showImprovedRecommendation
-                        ? "Refined Budget Strategy"
-                        : "Budget Reallocation"}
-                    </h6>
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">
+                      Key Principle:
+                    </span>
+                    <span className="text-foreground">
+                      &ldquo;Next dollar&rdquo; returns
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">
+                      Budget Changes:
+                    </span>
+                    <span className="text-foreground">
+                      Percentage-based (+25%, +50%)
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">
+                      Context Factor:
+                    </span>
+                    <span className="text-primary font-medium">
+                      Valentine&apos;s Day Intent
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-                    <div className="space-y-1 text-xs">
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-700 dark:text-gray-300">
-                          {showImprovedRecommendation
-                            ? "Generic → Brand: $2,200"
-                            : "Generic → Brand: $1,500"}
-                        </span>
-                        <span className="text-green-600 dark:text-green-400 font-medium">
-                          {showImprovedRecommendation
-                            ? "+31% ROAS"
-                            : "+23% ROAS"}
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-700 dark:text-gray-300">
-                          {showImprovedRecommendation
-                            ? "Brand Valentine Focus +40%"
-                            : "Competitor +25%"}
-                        </span>
-                        <span className="text-green-600 dark:text-green-400 font-medium">
-                          {showImprovedRecommendation ? "+23 conv" : "+15 conv"}
-                        </span>
-                      </div>
-                      {showImprovedRecommendation && (
-                        <div className="flex justify-between items-center">
-                          <span className="text-gray-700 dark:text-gray-300">
-                            Defensive bidding on Generic
-                          </span>
-                          <span className="text-blue-600 dark:text-blue-400 font-medium">
-                            -12% waste
-                          </span>
-                        </div>
-                      )}
+            {/* Campaign Performance Hierarchy */}
+            <div>
+              <h5 className="font-medium text-foreground mb-3 text-sm">
+                Performance Hierarchy
+              </h5>
+              <div className="space-y-2">
+                {/* Brand Campaigns */}
+                <div className="bg-card border border-border rounded-lg p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      <span className="text-sm font-medium text-foreground">
+                        Brand Campaigns
+                      </span>
                     </div>
-
-                    <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-600">
-                      <div className="flex space-x-1">
-                        <button
-                          className={`${
-                            showImprovedRecommendation
-                              ? "bg-purple-600 hover:bg-purple-700 dark:bg-purple-500 dark:hover:bg-purple-600"
-                              : "bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600"
-                          } text-white px-2 py-1 rounded text-xs font-medium transition-colors`}
-                        >
-                          Apply
-                        </button>
-                        <button className="border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 px-2 py-1 rounded text-xs font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                          Details
-                        </button>
-                      </div>
+                    <span className="text-green-600 text-xs font-bold">
+                      BEST ROI
+                    </span>
+                  </div>
+                  <div className="text-xs space-y-1">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">CPA:</span>
+                      <span className="text-foreground">₪216</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">
+                        Impression Share:
+                      </span>
+                      <span className="text-orange-500">99.25% (maxed)</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">
+                        Purchase Intent:
+                      </span>
+                      <span className="text-green-500">
+                        High (brand + product)
+                      </span>
                     </div>
                   </div>
                 </div>
+
+                {/* Competitor Campaigns */}
+                <div className="bg-card border border-border rounded-lg p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                      <span className="text-sm font-medium text-foreground">
+                        Competitor Campaigns
+                      </span>
+                    </div>
+                    <span className="text-yellow-600 text-xs font-bold">
+                      STRATEGIC
+                    </span>
+                  </div>
+                  <div className="text-xs space-y-1">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">CPA:</span>
+                      <span className="text-foreground">₪627</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">
+                        Impression Share:
+                      </span>
+                      <span className="text-blue-500">60.56% (scalable)</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Purpose:</span>
+                      <span className="text-yellow-500">
+                        Defensive + acquisition
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Generic Campaigns */}
+                <div className="bg-card border border-border rounded-lg p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                      <span className="text-sm font-medium text-foreground">
+                        Generic Campaigns
+                      </span>
+                    </div>
+                    <span className="text-red-600 text-xs font-bold">
+                      REDUCE
+                    </span>
+                  </div>
+                  <div className="text-xs space-y-1">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">CPA:</span>
+                      <span className="text-foreground">₪747</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">
+                        Impression Share:
+                      </span>
+                      <span className="text-blue-500">45.18% (poor ROI)</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">
+                        Marginal Return:
+                      </span>
+                      <span className="text-red-500">Worst performer</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Strategic Context & Learning */}
+            <div>
+              <h5 className="font-medium text-foreground mb-3 text-sm">
+                {showImprovedRecommendation
+                  ? "Context Learned"
+                  : "Strategic Context"}
+              </h5>
+              <div className="bg-card border border-border rounded-lg p-4">
+                <div className="space-y-3 text-xs">
+                  {!showImprovedRecommendation ? (
+                    <>
+                      <div className="flex items-start space-x-2">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full mt-1"></div>
+                        <span className="text-muted-foreground">
+                          Seasonal factor: Valentine&apos;s Day (+40% gift
+                          searches)
+                        </span>
+                      </div>
+                      <div className="flex items-start space-x-2">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full mt-1"></div>
+                        <span className="text-muted-foreground">
+                          Campaign architecture: 3-layer concentric model
+                        </span>
+                      </div>
+                      <div className="flex items-start space-x-2">
+                        <div className="w-2 h-2 bg-blue-500 rounded-full mt-1"></div>
+                        <span className="text-muted-foreground">
+                          Optimization rule: Percentage-based reallocation
+                        </span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-start space-x-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mt-1"></div>
+                        <span className="text-foreground">
+                          <strong>Learned:</strong> Valentine&apos;s Day = gift
+                          purchase priority
+                        </span>
+                      </div>
+                      <div className="flex items-start space-x-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mt-1"></div>
+                        <span className="text-foreground">
+                          <strong>Saved:</strong> Brand campaigns perform 3x
+                          better for gifts
+                        </span>
+                      </div>
+                      <div className="flex items-start space-x-2">
+                        <div className="w-2 h-2 bg-green-500 rounded-full mt-1"></div>
+                        <span className="text-foreground">
+                          <strong>Applied:</strong> Seasonal campaign strategy
+                          profile
+                        </span>
+                      </div>
+                      <div className="border-t border-border pt-2 mt-3">
+                        <span className="text-primary font-medium">
+                          Trust Level: Increased → Seasonal Auto-approval
+                          Enabled
+                        </span>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Recommendation Confidence & Risk */}
+            <div>
+              <h5 className="font-medium text-foreground mb-3 text-sm">
+                Confidence & Risk Assessment
+              </h5>
+              <div className="bg-card border border-border rounded-lg p-4 space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">
+                    Overall Confidence:
+                  </span>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-16 h-2 bg-muted rounded-full">
+                      <div className="w-14 h-2 bg-green-500 rounded-full"></div>
+                    </div>
+                    <span className="text-sm font-medium text-green-600">
+                      87%
+                    </span>
+                  </div>
+                </div>
+
+                <div className="text-xs space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Data Quality:</span>
+                    <span className="text-green-600">High (30-day trends)</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">
+                      Model Accuracy:
+                    </span>
+                    <span className="text-green-600">
+                      94% (validated patterns)
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Risk Level:</span>
+                    <span className="text-yellow-600">
+                      Low-Medium (seasonal)
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">
+                      Expected Timeline:
+                    </span>
+                    <span className="text-foreground">
+                      3-5 days to see impact
+                    </span>
+                  </div>
+                </div>
+
+                {showImprovedRecommendation && (
+                  <div className="border-t border-border pt-3 mt-3">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-primary rounded-full"></div>
+                      <span className="text-xs text-foreground">
+                        <strong>Context Integration:</strong> Your feedback
+                        improved accuracy by +12%
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </>
         ) : (
           <div className="text-center py-8">
-            <h5 className="font-medium text-gray-900 dark:text-white mb-2">
+            <h5 className="font-medium text-foreground mb-2">
               {selectedWorkflow.title}
             </h5>
-            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+            <p className="text-sm text-muted-foreground mb-4">
               {selectedWorkflow.description}
             </p>
-            <div className="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-700 rounded-lg p-4">
-              <p className="text-sm text-yellow-800 dark:text-yellow-200">
+            <div className="bg-card border border-border rounded-lg p-4">
+              <p className="text-sm text-accent-foreground">
                 This workflow is currently in development. Join our beta program
                 for early access!
               </p>

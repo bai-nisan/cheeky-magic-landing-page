@@ -47,7 +47,7 @@ export function useChatDemo({
     onFeedbackProcessingComplete,
   })
 
-  // Convert demo flow states to messages array
+  // Convert demo flow states to messages array with AX-focused content
   const messages: Message[] = useMemo(() => {
     const messageArray: Message[] = []
 
@@ -56,20 +56,57 @@ export function useChatDemo({
       messageArray.push({
         id: "user-1",
         role: "user",
-        content: workflowContent.userMessage,
+        content: "Optimize budget for my Valentine's Day t-shirt campaigns this week",
         timestamp: "just now",
       })
     }
 
-    // AI response with data gathering (step 2)
+    // AI response with strategic analysis and action items (step 2)
     if (showAIResponse && selectedWorkflow.status === "active" && showUserMessage) {
-      let aiContent = "I'll gather data from your connected platforms and analyze optimization opportunities for your t-shirt campaigns.\n\n"
+      let aiContent = "**Analysis Complete** - I've identified 3 high-impact optimizations for your Valentine's Day campaigns:\n\n"
       
-      // Add data gathering steps
-      gatheringSteps.forEach((step) => {
-        const statusIcon = step.status === "complete" ? "✅" : step.status === "connecting" ? "⏳" : "⏸️"
-        aiContent += `${statusIcon} ${step.platform}: ${step.message}\n`
-      })
+      // Show strategic action items based on optimization conversation guidelines
+      const completedSteps = gatheringSteps.filter(step => step.status === "complete").length
+      const totalSteps = gatheringSteps.length
+      
+      if (completedSteps >= 3) {
+        aiContent += "**Priority Action Items:**\n\n"
+        aiContent += "**1. Reallocate Budget to Brand Campaigns (+25%)**\n"
+        aiContent += "   • Current Brand CPA: ₪216 vs Generic: ₪747\n"
+        aiContent += "   • Expected impact: +15 conversions, -₪312 weekly cost\n"
+        aiContent += "   • Confidence: High (99.25% impression share)\n\n"
+        
+        aiContent += "**2. Reduce Generic Campaign Spend (-15%)**\n"
+        aiContent += "   • Current performance: ₪747 CPA at 45% impression share\n"
+        aiContent += "   • Reason: Poor marginal return on next dollar\n"
+        aiContent += "   • Confidence: High (textbook reallocation)\n\n"
+        
+        aiContent += "**3. Maintain Competitor Campaigns (Current Level)**\n"
+        aiContent += "   • Strategic value for Valentine's gift market\n"
+        aiContent += "   • 60% impression share allows for future scaling\n"
+        aiContent += "   • Confidence: Medium (seasonal context important)\n\n"
+      }
+      
+      // Show data gathering progress for incomplete steps
+      if (completedSteps < totalSteps) {
+        aiContent += "**Strategic Analysis Progress:**\n\n"
+        gatheringSteps.forEach((step, index) => {
+          const statusIcon = step.status === "complete" ? "✅" : step.status === "connecting" ? "⏳" : "⏸️"
+          if (index < completedSteps + 1) {
+            const cleanIcon = step.status === "complete" ? "[Complete]" : step.status === "connecting" ? "[Processing]" : "[Pending]"
+            aiContent += `${cleanIcon} ${step.platform}: Analyzing campaign performance hierarchy\n`
+          }
+        })
+        aiContent += "\n"
+      }
+      
+      if (completedSteps >= totalSteps) {
+        aiContent += "**Expected Weekly Impact:**\n"
+        aiContent += "• +15 conversions from brand campaign focus\n"
+        aiContent += "• -₪312 cost reduction from generic reallocation\n"
+        aiContent += "• 12% improvement in overall ROAS\n\n"
+        aiContent += "*Ready to implement? I can make these changes automatically or walk you through each step.*"
+      }
 
       messageArray.push({
         id: "ai-1",
@@ -89,14 +126,27 @@ export function useChatDemo({
       })
     }
 
-    // AI feedback processing response (step 4+)
+    // AI feedback processing response with learning context (step 4+)
     if (showFeedbackProcessing && selectedWorkflow.status === "active") {
-      let feedbackContent = "I'll incorporate your Valentine's Day insights and adjust the campaign strategy to prioritize brand campaigns for gift purchases.\n\n"
+      let feedbackContent = "**Learning from your feedback** - Updating strategy for Valentine's gift purchase patterns...\n\n"
       
-      // Add feedback processing steps
-      feedbackProcessingSteps.forEach((step) => {
+      const completedFeedbackSteps = feedbackProcessingSteps.filter(step => step.status === "complete").length
+      const totalFeedbackSteps = feedbackProcessingSteps.length
+      
+      if (completedFeedbackSteps >= 2) {
+        feedbackContent += "**Context Learned:**\n"
+        feedbackContent += "• Valentine's Day = gift purchase behavior priority\n"
+        feedbackContent += "• Brand campaigns perform better for gift buyers\n"
+        feedbackContent += "• Seasonal campaign strategy now saved to your profile\n\n"
+      }
+      
+      feedbackContent += "**Strategy Updates:**\n\n"
+      feedbackProcessingSteps.forEach((step, index) => {
         const statusIcon = step.status === "complete" ? "✅" : step.status === "connecting" ? "⏳" : "⏸️"
-        feedbackContent += `${statusIcon} ${step.platform}: ${step.message}\n`
+        if (index < completedFeedbackSteps + 1) {
+          const cleanIcon = step.status === "complete" ? "[Complete]" : step.status === "connecting" ? "[Processing]" : "[Pending]"
+          feedbackContent += `${cleanIcon} ${step.platform}: ${step.message}\n`
+        }
       })
 
       messageArray.push({
@@ -107,12 +157,12 @@ export function useChatDemo({
       })
     }
 
-    // AI final response (step 5)
+    // AI final response showing relationship building (step 5)
     if (feedbackProcessingComplete && selectedWorkflow.status === "active") {
       messageArray.push({
         id: "ai-3",
         role: "assistant",
-        content: "Perfect! I've recalculated the optimization with your Valentine's Day insight for t-shirt campaigns. The refined strategy prioritizes brand campaigns and adjusts for seasonal gift buying behavior.",
+        content: "**Strategy Updated**\n\n**New Allocation:**\n• Brand campaigns: +35% (was +25%)\n• Generic campaigns: -25% (was -15%)\n• Competitor campaigns: Maintained\n\n**Context Saved:**\n*I'll remember your Valentine's Day gift campaign preferences for future seasonal optimizations.*\n\n**Trust Level:** Increased - You can now approve seasonal adjustments automatically.",
         timestamp: "10 sec ago",
       })
     }

@@ -54,17 +54,7 @@ export function ChatInterface({
         ];
 
   return (
-    <div className="flex-1 relative h-full flex flex-col overflow-hidden">
-      {/* Header - Fixed at top */}
-      <div className="flex-shrink-0 px-4 sm:px-6 py-3 mt-4 border-b border-gray-100 dark:border-gray-700 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm">
-        <h4 className="font-medium text-gray-900 dark:text-white text-sm">
-          Conversation
-        </h4>
-        <p className="text-xs text-gray-500 dark:text-gray-400">
-          {selectedWorkflow.title} Assistant
-        </p>
-      </div>
-
+    <div className="flex-1 flex flex-col h-full min-h-0 overflow-hidden">
       {/* Chat Interface */}
       <Chat
         messages={messages}
@@ -73,7 +63,7 @@ export function ChatInterface({
         handleSubmit={handleSubmit}
         isGenerating={isGenerating}
         suggestions={suggestions}
-        className="flex-1"
+        className="flex-1 h-full"
       />
     </div>
   );

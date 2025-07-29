@@ -9,9 +9,9 @@ export default async function Page() {
   return (
     <>
       <HeroSection />
-      <ClientSection />
+      {/* <ClientSection /> */}
       <SphereMask />
-      {/* <PricingSection /> */}
+      <PricingSection />
       <CallToActionSection />
       <Particles
         className="absolute inset-0 -z-10"
@@ -19,7 +19,7 @@ export default async function Page() {
         ease={70}
         size={0.05}
         staticity={40}
-        color={"#ffffff"}
+        color={"hsl(var(--muted-foreground))"}
       />
     </>
   );

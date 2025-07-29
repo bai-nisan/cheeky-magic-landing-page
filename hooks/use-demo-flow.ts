@@ -70,27 +70,27 @@ export function useDemoFlow({
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false);
   const [feedbackProcessingSteps, setFeedbackProcessingSteps] = useState<DataGatheringStep[]>([
     {
-      platform: "Feedback Analysis",
+      platform: "Context Learning",
       status: "pending",
-      message: "Analyzing your Valentine's Day campaign preferences...",
+      message: "Saving Valentine's Day gift purchase preferences to your profile...",
       icon: "analysis",
     },
     {
-      platform: "Strategy Adjustment",
+      platform: "Strategy Refinement",
       status: "pending", 
-      message: "Adjusting brand vs generic campaign allocation...",
+      message: "Adjusting brand campaign priority from +25% to +35%...",
       icon: "insights",
     },
     {
-      platform: "Seasonal Optimization",
+      platform: "Trust Calibration",
       status: "pending",
-      message: "Optimizing for gift-purchase behavior patterns...",
+      message: "Increasing confidence level for seasonal optimizations...",
       icon: "meta",
     },
     {
-      platform: "Budget Reallocation", 
+      platform: "Business Rules Update", 
       status: "pending",
-      message: "Recalculating optimal budget distribution...",
+      message: "Adding 'gift campaigns prefer brand focus' to optimization rules...",
       icon: "google",
     },
   ]);
@@ -135,8 +135,12 @@ export function useDemoFlow({
           setTimeout(() => {
             setIsSimulatingTyping(false);
             setShowUserMessage(true);
-            setShowAIResponse(true);
             onUserMessageSent?.();
+            
+            // Add delay before AI starts responding
+            setTimeout(() => {
+              setShowAIResponse(true);
+            }, 1500); // 1.5 second delay between user message and AI response
           }, 800);
         }
       };

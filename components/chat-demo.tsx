@@ -20,16 +20,14 @@ function AnalyticsSidebarHeader() {
   const { isCollapsed } = useSidebar();
 
   return (
-    <SidebarHeader className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm mt-4">
+    <SidebarHeader className="bg-background border-l border-b px-4 sm:px-6 py-3 mt-0">
       <SidebarTrigger>
         <PanelRightClose className="h-4 w-4" />
       </SidebarTrigger>
       {!isCollapsed && (
         <div className="flex items-center gap-2 flex-1 justify-end">
-          <span className="font-semibold text-gray-900 dark:text-gray-100">
-            Analytics
-          </span>
-          <BarChart3 className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+          <span className="font-semibold text-card-foreground">Analytics</span>
+          <BarChart3 className="h-5 w-5 text-primary" />
         </div>
       )}
     </SidebarHeader>
@@ -45,6 +43,10 @@ export function ChatDemo() {
   const [showImprovedRecommendation, setShowImprovedRecommendation] =
     useState(false);
   const [feedbackProcessingComplete, setFeedbackProcessingComplete] =
+    useState(false);
+
+  // New state to track if we've received the first AI response
+  const [hasReceivedFirstResponse, setHasReceivedFirstResponse] =
     useState(false);
 
   // Demo flow: 0 = initial, 1 = user typing, 2 = ai responding/gathering data, 3 = recommendations shown, 4 = feedback, 5 = improved recommendation
@@ -65,6 +67,11 @@ export function ChatDemo() {
   const handleDataGatheringComplete = () => {
     // showDataPanel is now always true for constant size
     setCurrentStep(3); // Show recommendations
+
+    // Mark that we've received the first AI response after a short delay
+    setTimeout(() => {
+      setHasReceivedFirstResponse(true);
+    }, 1500);
 
     // Show feedback stage after showing recommendations
     setTimeout(() => {
@@ -91,6 +98,8 @@ export function ChatDemo() {
     setShowFeedbackStage(false);
     setShowImprovedRecommendation(false);
     setFeedbackProcessingComplete(false);
+    // Reset first response state for demo restart
+    setHasReceivedFirstResponse(false);
 
     setTimeout(() => {
       setCurrentStep(1); // Start typing simulation
@@ -108,7 +117,7 @@ export function ChatDemo() {
       {/* Skip link for accessibility */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-purple-600 text-white px-4 py-2 rounded-lg z-50"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-primary text-primary-foreground px-4 py-2 rounded-lg z-50"
       >
         Skip to main content
       </a>
@@ -117,10 +126,9 @@ export function ChatDemo() {
       <div
         className={cn(
           "w-full h-full flex flex-col overflow-hidden",
-          "bg-white/85 dark:bg-gray-900/85 backdrop-blur-sm",
-          "shadow-xl border border-white/30 dark:border-gray-700/40",
-          "rounded-[inherit] relative",
-          "animate-fade-in opacity-0 [--animation-delay:200ms]"
+          "bg-background",
+          "shadow-none border-0",
+          "rounded-[inherit] relative"
         )}
       >
         {/* Subtle gradient overlay */}
@@ -176,10 +184,11 @@ export function ChatDemo() {
             side="right"
             width="400px"
             collapsible={true}
+            defaultCollapsed={!hasReceivedFirstResponse}
             className={cn(
               "hidden lg:flex z-10",
-              "border-l border-white/20 dark:border-gray-700/40",
-              "bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm",
+              "border-l border-border",
+              "bg-background",
               "translate-y-[-1rem] animate-fade-in opacity-0 [--animation-delay:1100ms]"
             )}
           >

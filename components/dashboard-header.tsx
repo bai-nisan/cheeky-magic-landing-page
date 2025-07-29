@@ -17,9 +17,8 @@ export function DashboardHeader({
       aria-label="Dashboard header"
       className={cn(
         "relative flex-shrink-0 px-4 sm:px-6 py-3",
-        "bg-gradient-to-r from-gray-50/80 to-gray-100/80",
-        "dark:from-gray-800/80 dark:to-gray-700/80 backdrop-blur-sm",
-        "border-b border-gray-200/60 dark:border-gray-700/60",
+        "bg-background",
+        "border-b border-border",
         "animate-fade-in opacity-0 [--animation-delay:400ms]"
       )}
     >
@@ -31,17 +30,20 @@ export function DashboardHeader({
             aria-label="FashionCo logo"
             className={cn(
               "w-8 h-8 rounded-xl flex items-center justify-center shadow-lg",
-              "bg-gradient-to-br from-purple-600 to-pink-500",
+              "bg-gradient-to-br from-primary to-secondary",
               "animate-fade-in opacity-0 [--animation-delay:600ms]"
             )}
           >
-            <span className="text-white text-sm font-bold" aria-hidden="true">
+            <span
+              className="text-primary-foreground text-sm font-bold"
+              aria-hidden="true"
+            >
               F
             </span>
           </div>
           <span
             className={cn(
-              "hidden sm:block font-semibold text-gray-900 dark:text-white text-sm",
+              "hidden sm:block font-semibold text-foreground text-sm",
               "animate-fade-in opacity-0 [--animation-delay:700ms]"
             )}
           >
@@ -57,12 +59,10 @@ export function DashboardHeader({
           )}
         >
           <div className="text-center">
-            <h1 className="font-bold text-gray-900 dark:text-white text-sm sm:text-base">
+            <h1 className="font-bold text-foreground text-sm sm:text-base">
               Budget Optimization
             </h1>
-            <p className="text-xs text-gray-600 dark:text-gray-400">
-              FashionCo Marketing
-            </p>
+            <p className="text-xs text-muted-foreground">FashionCo Marketing</p>
           </div>
         </div>
 
@@ -80,15 +80,12 @@ export function DashboardHeader({
                 : "Restart the demo from the beginning"
             }
             className={cn(
-              "transition-all duration-300 backdrop-blur-sm shadow-lg",
-              "bg-gradient-to-r from-purple-50 to-blue-50",
-              "dark:from-purple-900/30 dark:to-blue-900/30",
-              "border-purple-200 dark:border-purple-700",
-              "hover:from-purple-100 hover:to-blue-100",
-              "dark:hover:from-purple-900/50 dark:hover:to-blue-900/50",
-              "text-gray-900 dark:text-white",
+              "transition-all duration-300 shadow-lg",
+              "bg-card border-border",
+              "hover:bg-muted",
+              "text-foreground",
               "px-4 sm:px-6 py-2 rounded-xl text-xs sm:text-sm font-semibold",
-              "focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+              "focus:ring-2 focus:ring-primary focus:ring-offset-2"
             )}
           >
             {currentStep === 0 ? "Start Demo" : "Replay Demo"}
