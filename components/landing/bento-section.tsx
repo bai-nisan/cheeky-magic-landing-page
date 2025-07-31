@@ -1,6 +1,8 @@
 "use client";
 
 import { SectionHeader } from "@/components/ui/section-header";
+import { ConnectDataSourceAnimation } from "@/components/connect-data-source-animation";
+import { AIDataFlowAnimation } from "@/components/ai-data-flow-animation";
 
 // Strategic features configuration
 const bentoSection = {
@@ -10,22 +12,7 @@ const bentoSection = {
   items: [
     {
       id: 1,
-      content: (
-        <div className="w-full h-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg flex items-center justify-center">
-          <div className="text-center p-6">
-            <div className="w-16 h-16 bg-blue-500 rounded-full mx-auto mb-4 flex items-center justify-center">
-              <svg
-                className="w-8 h-8 text-white"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
-              </svg>
-            </div>
-            <h4 className="font-semibold text-lg">Universal Connect</h4>
-          </div>
-        </div>
-      ),
+      content: <ConnectDataSourceAnimation />,
       title: "Connect Every Data Source",
       description:
         "Integrate Meta Ads, Google Ads, Shopify, anything. See your entire marketing ecosystem in one place.",
@@ -54,26 +41,7 @@ const bentoSection = {
     },
     {
       id: 3,
-      content: (
-        <div className="w-full h-full bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg flex items-center justify-center">
-          <div className="text-center p-6">
-            <div className="w-16 h-16 bg-purple-500 rounded-full mx-auto mb-4 flex items-center justify-center">
-              <svg
-                className="w-8 h-8 text-white"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-            <h4 className="font-semibold text-lg">Context-Aware AI</h4>
-          </div>
-        </div>
-      ),
+      content: <AIDataFlowAnimation />,
       title: "AI That Knows What You Need",
       description:
         "We handle the complex context engineering. You get perfectly timed insights without the technical complexity.",
