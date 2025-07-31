@@ -44,9 +44,12 @@ export function ChatDemo() {
 
   // New state to track if we've received the first AI response
   const [hasReceivedFirstResponse, setHasReceivedFirstResponse] =
-    useState(false);
+    useState(true); // Start with sidebar open
 
-  // Demo flow: 0 = initial, 1 = user typing, 2 = ai responding/gathering data, 3 = recommendations shown
+  // New state to track when to show the first two charts
+  const [showInitialCharts, setShowInitialCharts] = useState(false);
+
+  // Demo flow: 0 = initial, 1 = user typing, 2 = ai responding/gathering data, 3 = recommendations shown + first charts appear
   useEffect(() => {
     // Auto-start demo after page load
     const timer = setTimeout(() => {
@@ -65,17 +68,27 @@ export function ChatDemo() {
     // showDataPanel is now always true for constant size
     setCurrentStep(3); // Show recommendations
 
-    // Mark that we've received the first AI response after a short delay
+    // Show the first two charts after AI response appears
     setTimeout(() => {
-      setHasReceivedFirstResponse(true);
-    }, 1500);
+      setShowInitialCharts(true);
+    }, 800); // Show charts after AI response
+
+    // Trigger follow-up conversation for generative UI demo
+    setTimeout(() => {
+      setCurrentStep(4); // Start typing second message
+    }, 4000); // 4 seconds after recommendations
+  };
+
+  const handleSecondAIResponse = () => {
+    setCurrentStep(5); // Trigger chart generation
   };
 
   const restartDemo = () => {
     setCurrentStep(0);
     // showDataPanel stays true for constant size
-    // Reset first response state for demo restart
-    setHasReceivedFirstResponse(false);
+    // Reset states for demo restart
+    setHasReceivedFirstResponse(true); // Keep sidebar open
+    setShowInitialCharts(false); // Hide charts initially
 
     setTimeout(() => {
       setCurrentStep(1); // Start typing simulation
@@ -149,6 +162,7 @@ export function ChatDemo() {
               currentStep={currentStep}
               onUserMessageSent={handleUserMessageSent}
               onDataGatheringComplete={handleDataGatheringComplete}
+              onSecondAIResponse={handleSecondAIResponse}
             />
           </section>
 
@@ -173,6 +187,7 @@ export function ChatDemo() {
                 showDataPanel={showDataPanel}
                 currentStep={currentStep}
                 showImprovedRecommendation={false}
+                showInitialCharts={showInitialCharts}
               />
             </SidebarContent>
           </Sidebar>

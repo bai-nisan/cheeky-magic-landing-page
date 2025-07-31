@@ -11,22 +11,22 @@ const menuItem = [
   {
     id: 1,
     label: "Features",
-    href: "/features",
+    href: "#bento",
   },
   {
     id: 2,
-    label: "Pricing",
-    href: "#",
+    label: "Workflows",
+    href: "#workflows",
   },
   {
     id: 3,
-    label: "Careers",
-    href: "#",
+    label: "About",
+    href: "#about",
   },
   {
     id: 4,
-    label: "Contact Us",
-    href: "#",
+    label: "Contact",
+    href: "#contact",
   },
 ];
 
@@ -99,22 +99,19 @@ export function SiteHeader() {
     <>
       <header className="fixed left-0 top-0 z-50 w-full px-4 animate-fade-in border-b opacity-0 backdrop-blur-[12px] [--animation-delay:600ms]">
         <div className="container mx-auto flex h-[var(--navigation-height)] w-full items-center justify-between">
-          <Link className="text-md flex items-center justify-center" href="/">
-            Cheeky AI
+          <Link className="text-md flex items-center gap-2" href="/">
+            <div className="h-6 w-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-md flex items-center justify-center">
+              <span className="text-white font-bold text-xs">C</span>
+            </div>
+            <span className="font-semibold">Cheeky</span>
           </Link>
 
           <div className="ml-auto flex h-full items-center">
-            <Link className="mr-6 text-sm" href="/signin">
-              Log in
-            </Link>
             <Link
-              className={cn(
-                buttonVariants({ variant: "secondary" }),
-                "mr-6 text-sm"
-              )}
-              href="/signup"
+              className={cn(buttonVariants({ variant: "outline" }), "text-sm")}
+              href="#cta"
             >
-              Sign up
+              Join Waitlist
             </Link>
           </div>
           <button
@@ -140,8 +137,11 @@ export function SiteHeader() {
           )}
         >
           <div className="container mx-auto flex h-[var(--navigation-height)] items-center justify-between">
-            <Link className="text-md flex items-center" href="/">
-              Cheeky AI
+            <Link className="text-md flex items-center gap-2" href="/">
+              <div className="h-6 w-6 bg-gradient-to-r from-blue-500 to-purple-600 rounded-md flex items-center justify-center">
+                <span className="text-white font-bold text-xs">C</span>
+              </div>
+              <span className="font-semibold">Cheeky</span>
             </Link>
 
             <button

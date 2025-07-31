@@ -16,6 +16,7 @@ interface UseDemoFlowProps {
   currentStep: number;
   onUserMessageSent?: () => void;
   onDataGatheringComplete?: () => void;
+  onSecondAIResponse?: () => void;
 }
 
 export function useDemoFlow({
@@ -24,6 +25,7 @@ export function useDemoFlow({
   currentStep,
   onUserMessageSent,
   onDataGatheringComplete,
+  onSecondAIResponse,
 }: UseDemoFlowProps) {
   const [gatheringSteps, setGatheringSteps] = useState<DataGatheringStep[]>([
     {
@@ -62,6 +64,9 @@ export function useDemoFlow({
   const [isSimulatingTyping, setIsSimulatingTyping] = useState(false);
   const [showUserMessage, setShowUserMessage] = useState(false);
   const [showAIResponse, setShowAIResponse] = useState(false);
+  const [isSimulatingSecondTyping, setIsSimulatingSecondTyping] = useState(false);
+  const [showSecondUserMessage, setShowSecondUserMessage] = useState(false);
+  const [showSecondAIResponse, setShowSecondAIResponse] = useState(false);
 
   // Reset all states when demo restarts
   useEffect(() => {
@@ -70,6 +75,9 @@ export function useDemoFlow({
       setIsSimulatingTyping(false);
       setShowUserMessage(false);
       setShowAIResponse(false);
+      setIsSimulatingSecondTyping(false);
+      setShowSecondUserMessage(false);
+      setShowSecondAIResponse(false);
       setGatheringSteps((prev) =>
         prev.map((step) => ({ ...step, status: "pending" }))
       );
@@ -135,11 +143,44 @@ export function useDemoFlow({
     }
   }, [currentStep, showAIResponse, selectedWorkflow.status, onDataGatheringComplete]);
 
+  // Second typing simulation effect for follow-up message
+  useEffect(() => {
+    if (currentStep === 4 && selectedWorkflow.status === "active") {
+      const message = "Show me impression share breakdown and your insight on it";
+      setIsSimulatingSecondTyping(true);
+      let currentIndex = 0;
+
+      const typeInInput = () => {
+        if (currentIndex < message.length) {
+          setSimulatedInputValue(message.slice(0, currentIndex + 1));
+          currentIndex++;
+          setTimeout(typeInInput, 50);
+        } else {
+          setTimeout(() => {
+            setIsSimulatingSecondTyping(false);
+            setSimulatedInputValue("");
+            setShowSecondUserMessage(true);
+            
+            // Add delay before AI responds
+            setTimeout(() => {
+              setShowSecondAIResponse(true);
+              onSecondAIResponse?.();
+            }, 1500); // 1.5 second delay after user message
+          }, 800);
+        }
+      };
+
+      setTimeout(typeInInput, 500);
+    }
+  }, [currentStep, selectedWorkflow.status]);
+
   return {
     gatheringSteps,
     simulatedInputValue,
-    isSimulatingTyping,
+    isSimulatingTyping: isSimulatingTyping || isSimulatingSecondTyping,
     showUserMessage,
     showAIResponse,
+    showSecondUserMessage,
+    showSecondAIResponse,
   };
 } 

@@ -11,6 +11,7 @@ interface UseChatDemoProps {
   currentStep: number
   onUserMessageSent?: () => void
   onDataGatheringComplete?: () => void
+  onSecondAIResponse?: () => void
 }
 
 export function useChatDemo({
@@ -19,6 +20,7 @@ export function useChatDemo({
   currentStep,
   onUserMessageSent,
   onDataGatheringComplete,
+  onSecondAIResponse,
 }: UseChatDemoProps) {
   const [input, setInput] = useState("")
   
@@ -29,12 +31,15 @@ export function useChatDemo({
     isSimulatingTyping,
     showUserMessage,
     showAIResponse,
+    showSecondUserMessage,
+    showSecondAIResponse,
   } = useDemoFlow({
     selectedWorkflow,
     workflowContent,
     currentStep,
     onUserMessageSent,
     onDataGatheringComplete,
+    onSecondAIResponse,
   })
 
   // Convert demo flow states to messages array with AX-focused content
@@ -67,29 +72,15 @@ export function useChatDemo({
         })
       } else {
         // Show actual analysis results once complete
-        let aiContent = "**Analysis Complete** - I've identified 3 high-impact optimizations for your Valentine's Day campaigns:\n\n"
+        let aiContent = "### Top opportunity identified\n\n"
         
-        aiContent += "**Priority Action Items:**\n\n"
-        aiContent += "**1. Scale Demand Gen Campaigns (+$1,200)**\n"
-        aiContent += "   • Current Demand Gen CPA: $58 vs Generic: $202\n"
-        aiContent += "   • Expected impact: +21 conversions, $1,200 investment\n"
-        aiContent += "   • Confidence: High (highest intent audience targeting)\n\n"
+        aiContent += "**Scale Demand Gen Campaigns by $1,200**\n"
+        aiContent += "* Current CPA: $58 vs Generic: $202\n"
+        aiContent += "* Projected +21 conversions (≈ $57 per extra conversion)\n"
+        aiContent += "* Charts confirm CPA stability ($58 ± $2.8) and 73% impression-share headroom\n"
+        aiContent += "* Confidence: High (highest-intent audience targeting)\n\n"
         
-        aiContent += "**2. Boost Competitor Defense (+$500)**\n"
-        aiContent += "   • Current Competitor CPA: $169 at 60% impression share\n"
-        aiContent += "   • Reason: Block H&M/Zara from capturing searchers\n"
-        aiContent += "   • Confidence: High (strategic defensive value)\n\n"
-        
-        aiContent += "**3. Maintain Pure Brand (Defensive Focus)**\n"
-        aiContent += "   • Current Pure Brand CPA: $287 (defensive only)\n"
-        aiContent += "   • Purpose: Prevent competitors, not optimize conversions\n"
-        aiContent += "   • Confidence: High (expert-validated strategy)\n\n"
-        
-        aiContent += "**Expected Weekly Impact:**\n"
-        aiContent += "• +21 conversions from Demand Gen scaling\n"
-        aiContent += "• Enhanced competitor blocking from defense boost\n"
-        aiContent += "• 15% improvement in overall ROAS\n\n"
-        aiContent += "**Ready to implement?** I can make these changes automatically or walk you through each step."
+        aiContent += "Do you need any more information to help you make a decision?"
 
         messageArray.push({
           id: "ai-1",
@@ -98,6 +89,27 @@ export function useChatDemo({
           timestamp: "1 min ago",
           isLoading: false,
         })
+
+        // Add follow-up user message for generative UI demo (only when typing is done)
+        if (showSecondUserMessage) {
+          messageArray.push({
+            id: "user-2",
+            role: "user",
+            content: "Show me impression share breakdown and your insight on it",
+            timestamp: "30 sec ago",
+          })
+        }
+
+        // Add follow-up AI response for generative UI
+        if (showSecondAIResponse) {
+          messageArray.push({
+            id: "ai-2",
+            role: "assistant",
+            content: "Sure, check out the graph in the analytics dashboard.",
+            timestamp: "just now",
+            isLoading: false,
+          })
+        }
       }
     }
 
@@ -114,6 +126,8 @@ export function useChatDemo({
   }, [
     showUserMessage,
     showAIResponse,
+    showSecondUserMessage,
+    showSecondAIResponse,
     selectedWorkflow.status,
     workflowContent,
     gatheringSteps,

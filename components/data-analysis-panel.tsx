@@ -1,6 +1,26 @@
 import React from "react";
 import { PlatformIcon } from "@/components/ui/icons";
 import { Workflow, WorkflowContent } from "@/types/workflow";
+import { TrendingUp, CheckCircle, AlertTriangle } from "lucide-react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  Tooltip,
+  BarChart,
+  Bar,
+  Cell,
+} from "recharts";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface DataAnalysisPanelProps {
   selectedWorkflow: Workflow;
@@ -8,6 +28,7 @@ interface DataAnalysisPanelProps {
   showDataPanel: boolean;
   currentStep: number;
   showImprovedRecommendation: boolean;
+  showInitialCharts?: boolean;
 }
 
 export function DataAnalysisPanel({
@@ -16,443 +37,425 @@ export function DataAnalysisPanel({
   showDataPanel,
   currentStep,
   showImprovedRecommendation,
+  showInitialCharts = false,
 }: DataAnalysisPanelProps) {
+  const [showScalabilityChart, setShowScalabilityChart] = React.useState(false);
+  const [showChartSkeleton, setShowChartSkeleton] = React.useState(false);
+
+  // Consistent color palette for charts
+  const chartColors = {
+    primary: "#3b82f6", // Blue - primary actions, main metrics
+    success: "#10b981", // Green - positive performance, success states
+    warning: "#f59e0b", // Amber - caution, expensive but viable
+    danger: "#ef4444", // Red - problems, maxed out states
+    neutral: "#6b7280", // Gray - neutral/inactive states
+  };
+
+  // Show chart skeleton and then actual chart when AI responds
+  React.useEffect(() => {
+    if (currentStep >= 5) {
+      // Show skeleton first
+      setShowChartSkeleton(true);
+
+      // Then show actual chart after delay
+      const timer = setTimeout(() => {
+        setShowChartSkeleton(false);
+        setShowScalabilityChart(true);
+      }, 2000); // 2 second loading delay
+
+      return () => clearTimeout(timer);
+    } else {
+      setShowScalabilityChart(false);
+      setShowChartSkeleton(false);
+    }
+  }, [currentStep]);
+  // Incremental CPA data for Demand Gen scaling
+  const incrementalCPAData = [
+    { budget: "Current", cpa: 58 },
+    { budget: "+10%", cpa: 59 },
+    { budget: "+25%", cpa: 61 },
+    { budget: "+50%", cpa: 65 },
+    { budget: "+60%", cpa: 68 },
+  ];
+
+  // 30-day historical CPA data (showing stability)
+  const generateDailyData = () => {
+    const data = [];
+    const baseDate = new Date();
+    baseDate.setDate(baseDate.getDate() - 30);
+
+    for (let i = 0; i < 30; i++) {
+      const currentDate = new Date(baseDate);
+      currentDate.setDate(baseDate.getDate() + i);
+
+      // Generate CPA around $58 ± $4 (stable performance)
+      const variation = (Math.random() - 0.5) * 8; // ±4 range
+      const cpa = Math.round((58 + variation) * 100) / 100;
+
+      data.push({
+        date: currentDate.toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+        }),
+        cpa: Math.max(54, Math.min(62, cpa)), // Keep within reasonable bounds
+      });
+    }
+    return data;
+  };
+
+  const historicalCPAData = generateDailyData();
+
+  // Impression Share data for scalability analysis
+  const impressionShareData = [
+    {
+      campaign: "Demand Gen",
+      impressionShare: 73,
+      status: "scalable",
+      cpa: 58,
+      note: "Room to grow ✅",
+      color: chartColors.success,
+    },
+    {
+      campaign: "Brand+Product",
+      impressionShare: 99.25,
+      status: "maxed",
+      cpa: 143,
+      note: "Maxed out ⚠️",
+      color: chartColors.danger,
+    },
+    {
+      campaign: "Generic",
+      impressionShare: 45,
+      status: "expensive",
+      cpa: 202,
+      note: "Can scale but expensive",
+      color: chartColors.warning,
+    },
+  ];
+
+  // Custom tooltip component
+  const CustomTooltip = ({ active, payload, label }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+
+      // Check if this is impression share data (has campaign property)
+      if (data.campaign) {
+        return (
+          <div className="bg-background border border-border rounded-lg p-3 shadow-lg">
+            <p className="text-sm font-medium">{data.campaign}</p>
+            <p className="text-sm text-primary">{`Impression Share: ${data.impressionShare}%`}</p>
+            <p className="text-sm text-muted-foreground">{`CPA: $${data.cpa}`}</p>
+            <p className="text-xs text-muted-foreground mt-1">{data.note}</p>
+          </div>
+        );
+      }
+
+      // For budget/date charts
+      return (
+        <div className="bg-background border border-border rounded-lg p-2 shadow-lg">
+          <p className="text-sm font-medium">{label}</p>
+          <p className="text-sm text-primary">{`CPA: $${payload[0].value}`}</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="w-full h-full flex flex-col overflow-hidden relative bg-background">
-      {/* Analysis Content */}
       <div className="flex-1 p-4 space-y-6 overflow-y-auto min-h-0">
-        {selectedWorkflow.status === "active" ? (
-          <>
-            {/* Intelligence Sources & Decision Framework */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Intelligence Sources */}
-              <div>
-                <h5 className="font-medium text-foreground mb-3 text-sm">
-                  Intelligence Sources
-                </h5>
-                <div className="bg-card border border-border rounded-lg p-4 space-y-3">
-                  <div className="grid grid-cols-2 gap-3 text-xs">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+        {/* Campaign Scalability Analysis - Loading Skeleton */}
+        {showChartSkeleton && (
+          <Card className="animate-fade-up opacity-0 [--animation-delay:200ms]">
+            <CardHeader>
+              <CardTitle className="text-sm">
+                Campaign Scalability Analysis
+              </CardTitle>
+              <CardDescription className="text-xs">
+                Impression share levels showing which campaigns can handle more
+                budget
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[200px] w-full space-y-3">
+                {/* Chart skeleton */}
+                <div className="h-8 bg-gray-200 rounded animate-pulse"></div>
+                <div className="h-6 bg-gray-200 rounded animate-pulse w-3/4"></div>
+                <div className="h-6 bg-gray-200 rounded animate-pulse w-1/2"></div>
+                <div className="h-8 bg-gray-200 rounded animate-pulse"></div>
+                <div className="h-6 bg-gray-200 rounded animate-pulse w-2/3"></div>
+              </div>
+              {/* Status indicators skeleton */}
+              <div className="mt-4 space-y-2">
+                <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+              </div>
+            </CardContent>
+            <CardFooter className="flex-col items-start gap-2 text-sm">
+              <div className="h-4 bg-gray-200 rounded animate-pulse w-1/2"></div>
+              <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4"></div>
+            </CardFooter>
+          </Card>
+        )}
+
+        {/* Campaign Scalability Analysis - Actual Chart */}
+        {showScalabilityChart && (
+          <Card className="animate-fade-up opacity-0 [--animation-delay:200ms]">
+            <CardHeader>
+              <CardTitle className="text-sm">
+                Campaign Scalability Analysis
+              </CardTitle>
+              <CardDescription className="text-xs">
+                Impression share levels showing which campaigns can handle more
+                budget
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[200px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={impressionShareData}
+                    layout="vertical"
+                    margin={{
+                      top: 20,
+                      right: 50,
+                      left: 10,
+                      bottom: 20,
+                    }}
+                  >
+                    <XAxis
+                      type="number"
+                      domain={[0, 100]}
+                      tick={{ fontSize: 11 }}
+                      axisLine={false}
+                      tickLine={false}
+                      tickFormatter={(value) => `${value}%`}
+                    />
+                    <YAxis
+                      type="category"
+                      dataKey="campaign"
+                      tick={{ fontSize: 11 }}
+                      axisLine={false}
+                      tickLine={false}
+                      width={80}
+                    />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Bar dataKey="impressionShare" radius={[0, 4, 4, 0]}>
+                      {impressionShareData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              {/* Status indicators */}
+              <div className="mt-4 space-y-2">
+                {impressionShareData.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between text-xs"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">{item.campaign}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
                       <span className="text-muted-foreground">
-                        Google Ads API
+                        {item.impressionShare}%
                       </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-muted-foreground">
-                        Market Intel
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-muted-foreground">
-                        Campaign Analysis
-                      </span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                      <span className="text-primary">
-                        {showImprovedRecommendation
-                          ? "6 weeks learned"
-                          : "Learning..."}
-                      </span>
+                      {item.status === "scalable" && (
+                        <CheckCircle
+                          className="w-3 h-3"
+                          style={{ color: chartColors.success }}
+                        />
+                      )}
+                      {item.status === "maxed" && (
+                        <AlertTriangle
+                          className="w-3 h-3"
+                          style={{ color: chartColors.danger }}
+                        />
+                      )}
+                      {item.status === "expensive" && (
+                        <AlertTriangle
+                          className="w-3 h-3"
+                          style={{ color: chartColors.warning }}
+                        />
+                      )}
                     </div>
                   </div>
-                </div>
+                ))}
               </div>
-
-              {/* Decision Framework */}
-              <div>
-                <h5 className="font-medium text-foreground mb-3 text-sm">
-                  Decision Framework
-                </h5>
-                <div className="bg-card border border-border rounded-lg p-4 space-y-3">
-                  <div className="text-xs space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">Method:</span>
-                      <span className="text-foreground font-medium">
-                        Marginal Cost Optimization
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">Principle:</span>
-                      <span className="text-foreground">
-                        &ldquo;Next dollar&rdquo; returns
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">Context:</span>
-                      <span className="text-primary font-medium">
-                        Valentine&apos;s Apparel Gifts
-                      </span>
-                    </div>
-                    {showImprovedRecommendation && (
-                      <div className="border-t border-border pt-2 mt-2">
-                        <div className="flex justify-between items-center">
-                          <span className="text-muted-foreground">
-                            Trust Level:
-                          </span>
-                          <span className="text-green-600 font-medium">
-                            Auto-approval enabled
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
+            </CardContent>
+            <CardFooter className="flex-col items-start gap-2 text-sm">
+              <div className="flex gap-2 leading-none font-medium text-xs">
+                <span style={{ color: chartColors.success }}>
+                  Demand Gen has room to scale
+                </span>
+                <CheckCircle
+                  className="h-3 w-3"
+                  style={{ color: chartColors.success }}
+                />
               </div>
-            </div>
-
-            {/* Top Opportunities */}
-            <div>
-              <h5 className="font-medium text-foreground mb-3 text-sm">
-                Key Opportunities
-              </h5>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                <div className="bg-gradient-to-r from-green-500/10 to-green-600/10 border border-green-500/20 rounded-lg p-3">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium text-foreground">
-                      High Impact
-                    </span>
-                    <span className="text-green-600 text-xs font-bold">
-                      +21 CONV
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Scale Demand Gen (+$1,200)
-                  </p>
-                </div>
-
-                <div className="bg-gradient-to-r from-blue-500/10 to-blue-600/10 border border-blue-500/20 rounded-lg p-3">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-medium text-foreground">
-                      Strategic Defense
-                    </span>
-                    <span className="text-blue-600 text-xs font-bold">
-                      $500
-                    </span>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    Block H&M/Zara searches
-                  </p>
-                </div>
-
-                {showImprovedRecommendation && (
-                  <div className="bg-gradient-to-r from-purple-500/10 to-purple-600/10 border border-purple-500/20 rounded-lg p-3 lg:col-span-2">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-sm font-medium text-foreground">
-                        Expert Strategy
-                      </span>
-                      <span className="text-purple-600 text-xs font-bold">
-                        DEFENSIVE FOCUS
-                      </span>
-                    </div>
-                    <p className="text-xs text-muted-foreground">
-                      &ldquo;Pure brand: just prevent competitors&rdquo;
-                    </p>
-                  </div>
-                )}
+              <div className="text-muted-foreground leading-none text-xs">
+                Brand+Product maxed out at 99.25% - additional budget won&apos;t
+                help
               </div>
-            </div>
-
-            {/* Campaign Performance (Simplified) */}
-            <div>
-              <h5 className="font-medium text-foreground mb-3 text-sm">
-                Performance Ranking
-              </h5>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
-                <div className="bg-card border border-border rounded-lg p-3">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-foreground">
-                        Demand Gen
-                      </span>
-                    </div>
-                    <span className="text-green-600 text-xs font-bold">
-                      BEST
-                    </span>
-                  </div>
-                  <div className="text-xs space-y-1">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">CPA:</span>
-                      <span className="text-green-600 font-bold">$58</span>
-                    </div>
-                    <div className="text-muted-foreground">Highest Intent</div>
-                  </div>
-                </div>
-
-                <div className="bg-card border border-border rounded-lg p-3">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-foreground">
-                        Brand+Product
-                      </span>
-                    </div>
-                    <span className="text-blue-600 text-xs font-bold">
-                      HIGH
-                    </span>
-                  </div>
-                  <div className="text-xs space-y-1">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">CPA:</span>
-                      <span className="text-blue-600 font-bold">$143</span>
-                    </div>
-                    <div className="text-orange-500">99.25% maxed</div>
-                  </div>
-                </div>
-
-                <div className="bg-card border border-border rounded-lg p-3">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-foreground">
-                        Competitors
-                      </span>
-                    </div>
-                    <span className="text-yellow-600 text-xs font-bold">
-                      STRATEGIC
-                    </span>
-                  </div>
-                  <div className="text-xs space-y-1">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">CPA:</span>
-                      <span className="text-yellow-600 font-bold">$169</span>
-                    </div>
-                    <div className="text-blue-500">60% scalable</div>
-                  </div>
-                </div>
-
-                <div className="bg-card border border-border rounded-lg p-3">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-foreground">
-                        Generic
-                      </span>
-                    </div>
-                    <span className="text-orange-600 text-xs font-bold">
-                      DISCOVERY
-                    </span>
-                  </div>
-                  <div className="text-xs space-y-1">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">CPA:</span>
-                      <span className="text-orange-600 font-bold">$202</span>
-                    </div>
-                    <div className="text-muted-foreground">Discovery</div>
-                  </div>
-                </div>
-
-                <div className="bg-card border border-border rounded-lg p-3 lg:col-span-2">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                      <span className="text-sm font-medium text-foreground">
-                        Pure Brand
-                      </span>
-                    </div>
-                    <span className="text-red-600 text-xs font-bold">
-                      DEFENSIVE
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 gap-4 text-xs">
-                    <div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">CPA:</span>
-                        <span className="text-red-600 font-bold">$287</span>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-red-500">
-                        Defensive only - prevent competitors
-                      </div>
-                    </div>
-                  </div>
-                  {showImprovedRecommendation && (
-                    <div className="border-t border-border pt-2 mt-2">
-                      <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-primary rounded-full"></div>
-                        <span className="text-primary text-xs">
-                          Purchase intent hierarchy validated: performance
-                          matches prediction exactly
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                </div>
+              <div className="text-xs text-muted-foreground mt-2 p-2 bg-muted/50 rounded w-full">
+                💡 Visual proof of scalability - Demand Gen can absorb +$1,200
+                budget effectively
               </div>
-            </div>
+            </CardFooter>
+          </Card>
+        )}
 
-            {/* Strategic Context & Confidence/Risk */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Strategic Context */}
-              <div>
-                <h5 className="font-medium text-foreground mb-3 text-sm">
-                  {showImprovedRecommendation
-                    ? "Learned Strategy"
-                    : "Strategic Context"}
-                </h5>
-                <div className="bg-card border border-border rounded-lg p-4">
-                  <div className="space-y-2 text-xs">
-                    {!showImprovedRecommendation ? (
-                      <div className="grid grid-cols-1 gap-2">
-                        <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                          <span className="text-muted-foreground">
-                            3-layer concentric model: Generic → Competitors →
-                            Brand+Product
-                          </span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                          <span className="text-muted-foreground">
-                            Valentine's Day: +40% apparel gift searches
-                          </span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                          <span className="text-muted-foreground">
-                            Defensive strategy: Prevent competitors, not
-                            optimize conversions
-                          </span>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        <div className="grid grid-cols-1 gap-2">
-                          <div className="flex items-center space-x-2">
-                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                            <span className="text-foreground">
-                              <strong>Learned:</strong> Valentine's = apparel
-                              gift priority
-                            </span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                            <span className="text-foreground">
-                              <strong>Validated:</strong> Intent hierarchy
-                              drives performance
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                          <span className="text-foreground">
-                            <strong>Expert:</strong> &ldquo;Focus on defensive
-                            bidding&rdquo;
-                          </span>
-                        </div>
-                        <div className="border-t border-border pt-3 mt-3">
-                          <div className="flex items-center justify-between">
-                            <span className="text-primary font-medium">
-                              Expert-Level Partnership
-                            </span>
-                            <span className="text-green-600">
-                              Auto-approval enabled
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
+        {/* Incremental CPA Analysis */}
+        {showInitialCharts && (
+          <Card className="animate-fade-up opacity-0 [--animation-delay:200ms]">
+            <CardHeader>
+              <CardTitle className="text-sm">
+                Incremental CPA Analysis
+              </CardTitle>
+              <CardDescription className="text-xs">
+                Expected CPA at different budget levels for Demand Gen scaling
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[200px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart
+                    data={incrementalCPAData}
+                    margin={{
+                      top: 20,
+                      right: 40,
+                      left: 0,
+                      bottom: 20,
+                    }}
+                  >
+                    <XAxis
+                      dataKey="budget"
+                      tick={{ fontSize: 11 }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <YAxis
+                      domain={["dataMin - 2", "dataMax + 2"]}
+                      tick={{ fontSize: 11 }}
+                      axisLine={false}
+                      tickLine={false}
+                      tickFormatter={(value) => `$${value}`}
+                    />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Line
+                      type="monotone"
+                      dataKey="cpa"
+                      stroke={chartColors.primary}
+                      strokeWidth={2}
+                      dot={{ fill: chartColors.primary, strokeWidth: 2, r: 4 }}
+                      activeDot={{
+                        r: 6,
+                        stroke: chartColors.primary,
+                        strokeWidth: 2,
+                      }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
               </div>
-
-              {/* Confidence & Risk */}
-              <div>
-                <h5 className="font-medium text-foreground mb-3 text-sm">
-                  Confidence & Risk
-                </h5>
-                <div className="bg-card border border-border rounded-lg p-4 space-y-3">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm text-muted-foreground">
-                      Decision Confidence:
-                    </span>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-16 h-2 bg-muted rounded-full">
-                        <div
-                          className={`h-2 rounded-full ${
-                            showImprovedRecommendation
-                              ? "w-15 bg-green-500"
-                              : "w-14 bg-blue-500"
-                          }`}
-                        ></div>
-                      </div>
-                      <span
-                        className={`text-sm font-medium ${
-                          showImprovedRecommendation
-                            ? "text-green-600"
-                            : "text-blue-600"
-                        }`}
-                      >
-                        {showImprovedRecommendation ? "94%" : "87%"}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 gap-3 text-xs">
-                    <div>
-                      <div className="text-muted-foreground mb-1">
-                        Risk Level:
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                        <span className="text-yellow-600">
-                          Medium (seasonal timing)
-                        </span>
-                      </div>
-                    </div>
-                    <div>
-                      <div className="text-muted-foreground mb-1">
-                        Data Quality:
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span className="text-green-600">
-                          High (30-day trends)
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="border-t border-border pt-3 text-xs">
-                    <div className="flex justify-between items-center">
-                      <span className="text-muted-foreground">
-                        Expected Impact:
-                      </span>
-                      <span className="text-foreground">3-5 days</span>
-                    </div>
-                    {showImprovedRecommendation && (
-                      <div className="flex justify-between items-center mt-1">
-                        <span className="text-muted-foreground">
-                          Your Input Value:
-                        </span>
-                        <span className="text-primary">+7% accuracy</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
+            </CardContent>
+            <CardFooter className="flex-col items-start gap-2 text-sm">
+              <div className="flex gap-2 leading-none font-medium text-xs">
+                <span style={{ color: chartColors.success }}>
+                  +21 conversions expected
+                </span>
+                <TrendingUp
+                  className="h-3 w-3"
+                  style={{ color: chartColors.success }}
+                />
               </div>
-            </div>
-          </>
-        ) : (
-          <div className="text-center py-8">
-            <h5 className="font-medium text-foreground mb-2">
-              {selectedWorkflow.title}
-            </h5>
-            <p className="text-sm text-muted-foreground mb-4">
-              {selectedWorkflow.description}
-            </p>
-            <div className="bg-card border border-border rounded-lg p-4">
-              <p className="text-sm text-accent-foreground">
-                This workflow is currently in development. Join our beta program
-                for early access!
-              </p>
-            </div>
-          </div>
+              <div className="text-muted-foreground leading-none text-xs">
+                Recommendation: +$1,200 budget (+60%) → $68 CPA (+17%)
+              </div>
+              <div className="text-xs text-muted-foreground mt-2 p-2 bg-muted/50 rounded w-full">
+                💡 CPA increase is reasonable and maintains profitability while
+                scaling the highest-intent campaign.
+              </div>
+            </CardFooter>
+          </Card>
+        )}
+
+        {/* 30-Day Performance Trend */}
+        {showInitialCharts && (
+          <Card className="animate-fade-up opacity-0 [--animation-delay:400ms]">
+            <CardHeader>
+              <CardTitle className="text-sm">
+                30-Day Performance Trend
+              </CardTitle>
+              <CardDescription className="text-xs">
+                Daily CPA stability for Demand Gen campaign - last 30 days
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-[200px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart
+                    data={historicalCPAData}
+                    margin={{
+                      top: 20,
+                      right: 40,
+                      left: 0,
+                      bottom: 20,
+                    }}
+                  >
+                    <XAxis
+                      dataKey="date"
+                      tick={{ fontSize: 10 }}
+                      axisLine={false}
+                      tickLine={false}
+                      interval="preserveStartEnd"
+                    />
+                    <YAxis
+                      domain={[52, 64]}
+                      tick={{ fontSize: 11 }}
+                      axisLine={false}
+                      tickLine={false}
+                      tickFormatter={(value) => `$${value}`}
+                    />
+                    <Tooltip content={<CustomTooltip />} />
+                    <Line
+                      type="monotone"
+                      dataKey="cpa"
+                      stroke={chartColors.success}
+                      strokeWidth={2}
+                      dot={false}
+                      activeDot={{
+                        r: 4,
+                        stroke: chartColors.success,
+                        strokeWidth: 2,
+                      }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+            <CardFooter className="flex-col items-start gap-2 text-sm">
+              <div className="flex gap-2 leading-none font-medium text-xs">
+                <span style={{ color: chartColors.success }}>
+                  Stable performance
+                </span>
+                <TrendingUp
+                  className="h-3 w-3"
+                  style={{ color: chartColors.success }}
+                />
+              </div>
+              <div className="text-muted-foreground leading-none text-xs">
+                Average CPA: $58.2 ± $2.8 (consistent within target range)
+              </div>
+              <div className="text-xs text-muted-foreground mt-2 p-2 bg-muted/50 rounded w-full">
+                💡 Performance is predictable, not volatile - safe to scale with
+                confidence
+              </div>
+            </CardFooter>
+          </Card>
         )}
       </div>
     </div>
